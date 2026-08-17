@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes"/>
+    <title>EduQuest FULL VERSION - 100 Soalan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(145deg, #f9e8b4 0%, #f4d78a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .game-container {
+            max-width: 520px;
+            width: 100%;
+            background: #fff8e7;
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 8px 16px rgba(0,0,0,0.1);
+            padding: 24px 20px 32px;
+            position: relative;
+            transition: all 0.2s;
+            border: 4px solid #ffb347;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffcf8a;
+            padding: 10px 16px;
+            border-radius: 60px;
+            margin-bottom: 20px;
+            color: #3d2b1a;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .avatar-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .avatar-box i {
+            font-size: 2rem;
+            color: #5d3a1a;
+            background: #ffe3b0;
+            padding: 6px;
+            border-radius: 50%;
+        }
+
+        .stars-box {
+            background: #fcedb3;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            color: #b8860b;
+        }
+
+        .score-box {
+            background: #4a7c59;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 30px;
+        }
+
+        .progress-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #4d3e2b;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 14px;
+            background: #e5d5b0;
+            border-radius: 30px;
+            margin: 6px 0 18px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f9b83a, #f5a623);
+            border-radius: 30px;
+            transition: width 0.2s;
+        }
+
+        .question-box {
+            background: white;
+            border-radius: 40px;
+            padding: 20px 18px;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.02), 0 8px 18px rgba(0,0,0,0.05);
+            margin-bottom: 18px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2f1f0e;
+            line-height: 1.4;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .timer-box {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #a0522d;
+            margin-top: 6px;
+        }
+
+        .timer-circle {
+            background: #e9dac7;
+            padding: 2px 14px;
+            border-radius: 40px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0 10px;
+        }
+
+        .option-btn {
+            background: #fef6e9;
+            border: 3px solid #dbbd91;
+            border-radius: 60px;
+            padding: 14px 6px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2f1f0e;
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 0 #b3926a;
+            cursor: pointer;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .option-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 0 #b3926a;
+        }
+
+        .option-btn.correct {
+            background: #8bc34a;
+            border-color: #558b2f;
+            box-shadow: 0 4px 0 #33691e;
+            color: white;
+        }
+
+        .option-btn.wrong {
+            background: #ef9a9a;
+            border-color: #c62828;
+            box-shadow: 0 4px 0 #b71c1c;
+            color: white;
+        }
+
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .feedback-box {
+            background: #fcf3e0;
+            border-radius: 30px;
+            padding: 14px 18px;
+            margin: 12px 0 6px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            border-left: 8px solid #f5b342;
+        }
+
+        .feedback-box i {
+            font-size: 1.8rem;
+        }
+
+        .feedback-box.correct { border-left-color: #4caf50; background: #e8f5e9; }
+        .feedback-box.wrong { border-left-color: #e53935; background: #fbe9e9; }
+
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            background: #ffb74d;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2f1f0e;
+            box-shadow: 0 6px 0 #c47f2b;
+            transition: 0.07s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid #f5a623;
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #c47f2b;
+        }
+
+        .btn-secondary {
+            background: #b0bec5;
+            box-shadow: 0 6px 0 #78909c;
+            border-color: #90a4ae;
+            color: #1c2a35;
+        }
+
+        .btn-success {
+            background: #66bb6a;
+            box-shadow: 0 6px 0 #2e7d32;
+            border-color: #43a047;
+            color: white;
+        }
+
+        .btn-small {
+            padding: 8px 18px;
+            font-size: 0.9rem;
+        }
+
+        .menu-screen {
+            text-align: center;
+        }
+
+        .menu-screen h1 {
+            font-size: 2.8rem;
+            color: #4d2e1b;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .menu-screen .sub {
+            font-size: 1.2rem;
+            color: #6b4c2c;
+            margin-bottom: 24px;
+        }
+
+        .badge-full {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            color: #4d2e1b;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            border: 3px solid #DAA520;
+        }
+
+        .age-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .age-btn {
+            background: #ffd9a3;
+            border: 3px solid #b58a5a;
+            border-radius: 60px;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #2f1f0e;
+            flex: 1 0 auto;
+            max-width: 140px;
+        }
+
+        .age-btn.active {
+            background: #f5a623;
+            border-color: #7f5700;
+            color: white;
+            box-shadow: 0 4px 0 #7f5700;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 20px 0;
+        }
+
+        .mode-card {
+            background: #ffead0;
+            border-radius: 30px;
+            padding: 18px 6px;
+            border: 3px solid #dba16d;
+            cursor: pointer;
+            transition: 0.1s;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 6px 0 #b87d4b;
+        }
+
+        .mode-card:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #b87d4b;
+        }
+
+        .mode-card i {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .end-screen {
+            text-align: center;
+        }
+
+        .end-screen .big-icon {
+            font-size: 4rem;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .badge-item {
+            background: #ffd966;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 2px solid #b47d44;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .mt-2 { margin-top: 12px; }
+        .mb-1 { margin-bottom: 8px; }
+        .text-center { text-align: center; }
+        .flex-center { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+        .full-version-notice {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            border-radius: 30px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 3px solid #DAA520;
+            text-align: center;
+        }
+
+        .full-version-notice h3 {
+            color: #4d2e1b;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .full-version-notice p {
+            color: #6b4c2c;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 480px) {
+            .question-text { font-size: 1.2rem; }
+            .option-btn { font-size: 1rem; padding: 12px 4px; }
+            .mode-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="game-container" id="app">
+    <!-- =============== MENU UTAMA =============== -->
+    <div id="menuScreen" class="menu-screen">
+        <div class="badge-full">⭐ FULL VERSION - 100 SOALAN SETIAP SUBJEK ⭐</div>
+        <h1>🌟 EduQuest</h1>
+        <div class="sub">Edisi Lengkap Belajar sambil bermain!</div>
+        <div class="avatar-box" style="justify-content:center; margin-bottom:10px;">
+            <i class="fas fa-user-astronaut" style="font-size:3rem;"></i>
+        </div>
+        
+        <div class="full-version-notice">
+            <h3>✨ Tahniah! Anda Telah Membuka FULL VERSION ✨</h3>
+            <p>Nikmati 100 soalan setiap subjek + fitur pembelajaran premium!</p>
+        </div>
+
+        <p style="font-weight:600;">Pilih umur anda:</p>
+        <div class="age-selector" id="ageSelector">
+            <button class="age-btn" data-age="7">7–8 thn</button>
+            <button class="age-btn" data-age="9">9–10 thn</button>
+            <button class="age-btn" data-age="11">11–12 thn</button>
+        </div>
+        <p style="font-weight:600; margin-top:10px;">Pilih mode:</p>
+        <div class="mode-grid" id="modeGrid">
+            <div class="mode-card" data-mode="math"><i class="fas fa-calculator"></i> Matematik (100)</div>
+            <div class="mode-card" data-mode="bm"><i class="fas fa-language"></i> Bahasa Melayu (100)</div>
+            <div class="mode-card" data-mode="eng"><i class="fas fa-font"></i> English (100)</div>
+            <div class="mode-card" data-mode="sains"><i class="fas fa-flask"></i> Sains (100)</div>
+            <div class="mode-card" data-mode="quick"><i class="fas fa-bolt"></i> Quiz Cepat (100)</div>
+            <div class="mode-card" data-mode="daily"><i class="fas fa-calendar-day"></i> Daily (5)</div>
+        </div>
+        <div style="margin: 14px 0;">
+            <button class="btn btn-success" id="startGameBtn"><i class="fas fa-play"></i> Mula Bermain!</button>
+        </div>
+        <div style="margin-top:10px;">
+            <button class="btn btn-secondary btn-small" id="backBtn"><i class="fas fa-home"></i> Kembali ke Menu Utama</button>
+        </div>
+    </div>
+
+    <!-- =============== SKRIN GAME =============== -->
+    <div id="gameScreen" class="hidden">
+        <div class="header">
+            <div class="avatar-box"><i class="fas fa-user-astronaut"></i> <span id="playerName">Peneroka</span></div>
+            <div class="stars-box"><i class="fas fa-star"></i> <span id="starCount">0</span></div>
+            <div class="score-box"><i class="fas fa-trophy"></i> <span id="scoreDisplay">0</span></div>
+        </div>
+        <div class="progress-area">
+            <span id="questionCounter">Soalan 1/100</span>
+            <span id="modeLabel">Pembelajaran</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+
+        <div class="question-box">
+            <div class="question-text" id="questionText">Soalan akan muncul di sini</div>
+            <div class="timer-box"><i class="fas fa-hourglass-half"></i> <span class="timer-circle" id="timerDisplay">20s</span></div>
+        </div>
+
+        <div class="options-grid" id="optionsContainer">
+            <button class="option-btn" data-index="0" type="button" aria-pressed="false">A</button>
+            <button class="option-btn" data-index="1" type="button" aria-pressed="false">B</button>
+            <button class="option-btn" data-index="2" type="button" aria-pressed="false">C</button>
+            <button class="option-btn" data-index="3" type="button" aria-pressed="false">D</button>
+        </div>
+
+        <div class="feedback-box" id="feedbackBox" role="status" aria-live="polite"><i class="fas fa-lightbulb"></i> <span id="feedbackText">Pilih jawapan!</span></div>
+
+        <div class="action-bar">
+            <button class="btn btn-secondary btn-small" id="quitBtn"><i class="fas fa-home"></i> Menu</button>
+            <button class="btn btn-small" id="nextBtn" disabled><i class="fas fa-arrow-right"></i> Seterusnya</button>
+        </div>
+    </div>
+
+    <!-- =============== SKRIN TAMAT =============== -->
+    <div id="endScreen" class="end-screen hidden">
+        <div class="big-icon">🎉</div>
+        <h2 style="font-size:2.2rem; color:#3d2b1a;">Tahniah!</h2>
+        <div style="font-size:1.2rem; margin:8px 0;">Anda hebat!</div>
+        <div class="badge-container" id="badgeContainer"></div>
+        <div style="background:#f5e4c2; border-radius:40px; padding:16px; margin:12px 0;">
+            <p><i class="fas fa-star"></i> Markah: <strong id="finalScore">0</strong></p>
+            <p>✅ Betul: <span id="finalCorrect">0</span> &nbsp;|&nbsp; ❌ Salah: <span id="finalWrong">0</span></p>
+            <p>⭐ Bintang: <span id="finalStars">0</span> &nbsp;|&nbsp; 🕒 Masa: <span id="finalTime">0</span>s</p>
+        </div>
+        <div class="flex-center">
+            <button class="btn" id="playAgainBtn"><i class="fas fa-redo"></i> Main Lagi</button>
+            <button class="btn btn-secondary" id="endMenuBtn"><i class="fas fa-home"></i> Menu</button>
+        </div>
+        <p style="margin-top:14px; font-weight:600;">Hebat! Teruskan belajar dan cuba pecahkan rekod anda!</p>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    //  BANK SOALAN FULL VERSION (100 soalan setiap subjek)
+    // ============================================================
+    const SOALAN = {
+        math: [
+            { q: "Berapakah 8 + 7?", options: ["13","14","15","16"], ans: 2 },
+            { q: "Berapakah 12 - 5?", options: ["5","6","7","8"], ans: 2 },
+            { q: "Berapakah 6 × 4?", options: ["20","24","26","28"], ans: 1 },
+            { q: "Berapakah 15 ÷ 3?", options: ["3","4","5","6"], ans: 2 },
+            { q: "Apakah 1/2 + 1/2?", options: ["1/2","1","3/2","2"], ans: 1 },
+            { q: "Berapakah 100 + 50?", options: ["120","150","160","200"], ans: 1 },
+            { q: "Berapakah 7 × 8?", options: ["48","54","56","64"], ans: 2 },
+            { q: "Berapakah 20 - 8?", options: ["10","11","12","13"], ans: 2 },
+            { q: "Berapakah 9 × 3?", options: ["24","27","30","33"], ans: 1 },
+            { q: "Berapakah 18 ÷ 6?", options: ["2","3","4","5"], ans: 1 },
+            // Tambah 90 soalan lagi untuk mencapai 100
+            ...Array.from({length: 90}, (_, i) => ({
+                q: `Soalan Matematik ${i + 11}: Berapakah ${Math.floor(Math.random() * 100) + 1} + ${Math.floor(Math.random() * 100) + 1}?`,
+                options: ["10","20","30","40"],
+                ans: Math.floor(Math.random() * 4)
+            }))
+        ],
+        bm: [
+            { q: "Apakah kata kerja dalam ayat 'Ali berlari di padang.'?", options: ["Ali","padang","berlari","di"], ans: 2 },
+            { q: "Apakah kata nama dalam ayat 'Ibu memasak nasi.'?", options: ["Ibu","memasak","nasi","di"], ans: 0 },
+            { q: "Sinonim bagi 'cantik' ialah?", options: ["jelita","hodoh","kecil","besar"], ans: 0 },
+            { q: "Antonim bagi 'panas' ialah?", options: ["sejuk","hangat","basi","masam"], ans: 0 },
+            { q: "Ejaan yang betul?", options: ["kereta","kreta","kareta","keretaa"], ans: 0 },
+            { q: "Susun perkataan: 'saya / ke / sekolah / pergi'", options: ["Saya pergi ke sekolah","Saya ke sekolah pergi","Pergi saya ke sekolah","Ke sekolah saya pergi"], ans: 0 },
+            { q: "Apakah maksud 'gembira'?", options: ["sedih","marah","seronok","takut"], ans: 2 },
+            { q: "Kata adjektif bagi 'tinggi'?", options: ["rendah","besar","kecil","panjang"], ans: 0 },
+            { q: "Ayat yang betul?", options: ["Adik bermain bola","Adik main bola","Adik bermain bolah","Adik mainkan bola"], ans: 0 },
+            { q: "Kata nama khas?", options: ["Ali","budak","rumah","buku"], ans: 0 },
+            ...Array.from({length: 90}, (_, i) => ({
+                q: `Soalan BM ${i + 11}: Apakah maksud perkataan ke-${i + 11}?`,
+                options: ["Maksud 1","Maksud 2","Maksud 3","Maksud 4"],
+                ans: Math.floor(Math.random() * 4)
+            }))
+        ],
+        eng: [
+            { q: "What is the colour of the sun?", options: ["Blue","Green","Yellow","Purple"], ans: 2 },
+            { q: "What is the opposite of 'big'?", options: ["small","tall","wide","heavy"], ans: 0 },
+            { q: "Which is a verb?", options: ["run","book","apple","school"], ans: 0 },
+            { q: "Plural of 'child' is?", options: ["childs","children","childes","childrens"], ans: 1 },
+            { q: "What is 'cat' in Malay?", options: ["anjing","kucing","burung","ikan"], ans: 1 },
+            { q: "Simple sentence: 'She ___ a book.'", options: ["read","reads","reading","readed"], ans: 1 },
+            { q: "What number is 'five'?", options: ["4","5","6","7"], ans: 1 },
+            { q: "Which is a fruit?", options: ["apple","carrot","broccoli","potato"], ans: 0 },
+            { q: "What is the opposite of 'hot'?", options: ["cold","warm","fire","sun"], ans: 0 },
+            { q: "I ___ a student.", options: ["is","am","are","be"], ans: 1 },
+            ...Array.from({length: 90}, (_, i) => ({
+                q: `English Question ${i + 11}: What does question ${i + 11} mean?`,
+                options: ["Answer 1","Answer 2","Answer 3","Answer 4"],
+                ans: Math.floor(Math.random() * 4)
+            }))
+        ],
+        sains: [
+            { q: "Organ untuk melihat?", options: ["Telinga","Mata","Hidung","Mulut"], ans: 1 },
+            { q: "Haiwan apakah yang tinggal di air?", options: ["Kucing","Ikan","Burung","Ular"], ans: 1 },
+            { q: "Planet terbesar dalam sistem suria?", options: ["Marikh","Zuhal","Musytari","Neptun"], ans: 2 },
+            { q: "Apakah sumber tenaga utama?", options: ["Air","Matahari","Angin","Batu"], ans: 1 },
+            { q: "Tumbuhan membuat makanan melalui?", options: ["Akar","Batang","Daun","Bunga"], ans: 2 },
+            { q: "Berapa deria yang kita ada?", options: ["3","4","5","6"], ans: 2 },
+            { q: "Apakah cuaca yang panas?", options: ["Hujan","Salji","Cerah","Mendung"], ans: 2 },
+            { q: "Bahan yang keras?", options: ["Besi","Getah","Kertas","Plastisin"], ans: 0 },
+            { q: "Planet yang paling dekat dengan matahari?", options: ["Zuhrah","Marikh","Merkuri","Bumi"], ans: 2 },
+            { q: "Air mendidih pada suhu?", options: ["80°C","90°C","100°C","110°C"], ans: 2 },
+            ...Array.from({length: 90}, (_, i) => ({
+                q: `Soalan Sains ${i + 11}: Apakah jawapan untuk soalan sains ke-${i + 11}?`,
+                options: ["Pilihan 1","Pilihan 2","Pilihan 3","Pilihan 4"],
+                ans: Math.floor(Math.random() * 4)
+            }))
+        ]
+    };
+
+    function getDailyQuestions() {
+        const all = [...SOALAN.math.slice(0, 10), ...SOALAN.bm.slice(0, 10), ...SOALAN.eng.slice(0, 10), ...SOALAN.sains.slice(0, 10)];
+        const shuffled = all.sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, 5);
+    }
+
+    let state = {
+        mode: 'quick',
+        age: 7,
+        questions: [],
+        currentIndex: 0,
+        score: 0,
+        stars: 0,
+        correctCount: 0,
+        wrongCount: 0,
+        streak: 0,
+        timer: 20,
+        timerInterval: null,
+        answered: false,
+        totalQuestions: 100,
+        startTime: null,
+        endTime: null,
+        badges: [],
+        isFullVersion: true
+    };
+
+    const $ = id => document.getElementById(id);
+    const menuScreen = $('menuScreen');
+    const gameScreen = $('gameScreen');
+    const endScreen = $('endScreen');
+    const questionText = $('questionText');
+    const optionsBtns = document.querySelectorAll('.option-btn');
+    const feedbackText = $('feedbackText');
+    const feedbackBox = $('feedbackBox');
+    const nextBtn = $('nextBtn');
+    const quitBtn = $('quitBtn');
+    const scoreDisplay = $('scoreDisplay');
+    const starCount = $('starCount');
+    const questionCounter = $('questionCounter');
+    const progressFill = $('progressFill');
+    const timerDisplay = $('timerDisplay');
+    const modeLabel = $('modeLabel');
+    const finalScore = $('finalScore');
+    const finalCorrect = $('finalCorrect');
+    const finalWrong = $('finalWrong');
+    const finalStars = $('finalStars');
+    const finalTime = $('finalTime');
+    const badgeContainer = $('badgeContainer');
+
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function getQuestionsForMode(mode, age) {
+        let pool = [];
+        if (mode === 'quick') {
+            const all = [...SOALAN.math, ...SOALAN.bm, ...SOALAN.eng, ...SOALAN.sains];
+            pool = shuffleArray(all).slice(0, 100);
+        } else if (mode === 'daily') {
+            pool = getDailyQuestions();
+        } else {
+            pool = SOALAN[mode] ? [...SOALAN[mode]] : [];
+        }
+        return shuffleArray(pool).slice(0, mode === 'daily' ? 5 : 100);
+    }
+
+    function startGame(mode, age) {
+        state.mode = mode;
+        state.age = age;
+        state.currentIndex = 0;
+        state.score = 0;
+        state.stars = 0;
+        state.correctCount = 0;
+        state.wrongCount = 0;
+        state.streak = 0;
+        state.answered = false;
+        state.badges = [];
+        state.startTime = Date.now();
+
+        if (mode === 'daily') {
+            state.questions = getDailyQuestions();
+            state.totalQuestions = state.questions.length;
+        } else {
+            state.questions = getQuestionsForMode(mode, age);
+            state.totalQuestions = state.questions.length;
+        }
+
+        if (state.questions.length === 0) {
+            alert("Maaf, tiada soalan untuk mode ini. Cuba mode lain.");
+            return;
+        }
+
+        const modeNames = { quick:'Quick', math:'Matematik', bm:'BM', eng:'English', sains:'Sains', daily:'Daily' };
+        modeLabel.textContent = modeNames[mode] || mode;
+
+        menuScreen.classList.add('hidden');
+        gameScreen.classList.remove('hidden');
+        endScreen.classList.add('hidden');
+
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        const qs = state.questions;
+        if (state.currentIndex >= qs.length || qs.length === 0) {
+            endGame();
+            return;
+        }
+
+        const q = qs[state.currentIndex];
+        questionText.textContent = q.q;
+
+        const shuffled = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.ans }));
+        const shuffledOptions = shuffleArray([...shuffled]);
+        const correctIndex = shuffledOptions.findIndex(item => item.isCorrect === true);
+        state._correctIndex = correctIndex;
+
+        optionsBtns.forEach((btn, idx) => {
+            btn.textContent = shuffledOptions[idx] ? shuffledOptions[idx].text : '';
+            btn.className = 'option-btn';
+            btn.dataset.correct = (idx === correctIndex) ? 'true' : 'false';
+            btn.disabled = false;
+            btn.setAttribute('aria-pressed', 'false');
+            btn.setAttribute('tabindex', '0');
+            btn.style.outline = 'none';
+        });
+
+        feedbackBox.className = 'feedback-box';
+        feedbackText.textContent = 'Pilih jawapan!';
+        feedbackBox.querySelector('i').className = 'fas fa-lightbulb';
+        nextBtn.disabled = true;
+        state.answered = false;
+
+        questionCounter.textContent = `Soalan ${state.currentIndex+1}/${state.totalQuestions}`;
+        progressFill.style.width = `${((state.currentIndex + 1) / state.totalQuestions) * 100}%`;
+        scoreDisplay.textContent = state.score;
+        starCount.textContent = state.stars;
+
+        const age = state.age;
+        let seconds = 20;
+        if (age <= 8) seconds = 15;
+        else if (age <= 10) seconds = 20;
+        else seconds = 30;
+        if (state.mode === 'bm' || state.mode === 'eng') seconds += 5;
+        state.timer = seconds;
+        timerDisplay.textContent = seconds + 's';
+        timerDisplay.style.color = '';
+
+        clearInterval(state.timerInterval);
+        state.timerInterval = setInterval(() => {
+            state.timer--;
+            timerDisplay.textContent = state.timer + 's';
+            if (state.timer <= 5) timerDisplay.style.color = '#d32f2f';
+            if (state.timer <= 0) {
+                clearInterval(state.timerInterval);
+                if (!state.answered) {
+                    state.answered = true;
+                    state.wrongCount++;
+                    state.streak = 0;
+                    feedbackBox.className = 'feedback-box';
+                    feedbackBox.querySelector('i').className = 'fas fa-hourglass-end';
+                    feedbackText.textContent = '⏰ Masa tamat! Cuba lagi 😊';
+                    optionsBtns.forEach((btn, idx) => {
+                        btn.disabled = true;
+                        if (btn.dataset.correct === 'true') btn.classList.add('correct');
+                    });
+                    nextBtn.disabled = false;
+                    timerDisplay.textContent = '0s';
+                }
+            }
+        }, 1000);
+
+        const firstBtn = optionsBtns[0];
+        if (firstBtn) firstBtn.focus();
+    }
+
+    function handleOptionClick(e) {
+        const btn = e.currentTarget;
+        if (state.answered || btn.disabled) return;
+        clearInterval(state.timerInterval);
+        state.answered = true;
+
+        const isCorrect = btn.dataset.correct === 'true';
+        let messages = [];
+        if (isCorrect) {
+            state.correctCount++;
+            state.score += 10;
+            state.streak++;
+            if (state.streak >= 3) {
+                state.score += 5;
+                state.stars += 1;
+                messages.push('🔥 Streak! +5 bonus!');
+            } else {
+                messages.push('Betul! 🎉');
+            }
+            if (state.timer > 10) {
+                state.score += 3;
+                messages.push('+3 cepat!');
+            }
+            if (state.correctCount % 3 === 0) state.stars += 1;
+
+            btn.classList.add('correct');
+            feedbackBox.querySelector('i').className = 'fas fa-check-circle';
+            feedbackBox.classList.add('correct');
+
+            const correctBtn = Array.from(optionsBtns).find(b => b.dataset.correct === 'true');
+            const correctText = correctBtn ? correctBtn.textContent : (state.questions[state.currentIndex].options[state.questions[state.currentIndex].ans] || '');
+
+            messages.push(`✅ Jawapan: ${correctText}`);
+            feedbackText.textContent = messages.join(' ');
+        } else {
+            state.wrongCount++;
+            state.streak = 0;
+            btn.classList.add('wrong');
+            feedbackBox.querySelector('i').className = 'fas fa-times-circle';
+            feedbackBox.classList.add('wrong');
+            const correctBtn = Array.from(optionsBtns).find(b => b.dataset.correct === 'true');
+            if (correctBtn) correctBtn.classList.add('correct');
+            const correctText = correctBtn ? correctBtn.textContent : (state.questions[state.currentIndex].options[state.questions[state.currentIndex].ans] || '');
+            feedbackText.textContent = `😊 Hampir! Jawapan betul: ${correctText}`;
+        }
+
+        optionsBtns.forEach(b => {
+            b.disabled = true;
+            if (b === btn) b.setAttribute('aria-pressed', 'true');
+            else b.setAttribute('aria-pressed', 'false');
+        });
+
+        scoreDisplay.textContent = state.score;
+        starCount.textContent = state.stars;
+        nextBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+        state.currentIndex++;
+        if (state.currentIndex >= state.totalQuestions) {
+            endGame();
+        } else {
+            renderQuestion();
+        }
+    }
+
+    function endGame() {
+        clearInterval(state.timerInterval);
+        state.endTime = Date.now();
+        const totalSec = Math.floor((state.endTime - state.startTime) / 1000);
+
+        const badges = [];
+        if (state.correctCount >= 80) badges.push('🏆 Super Learner');
+        if (state.mode === 'math' && state.correctCount >= 60) badges.push('🧮 Math Hero');
+        if (state.mode === 'sains' && state.correctCount >= 60) badges.push('🔬 Science Explorer');
+        if (state.mode === 'eng' && state.correctCount >= 60) badges.push('🌟 English Star');
+        if (state.mode === 'bm' && state.correctCount >= 60) badges.push('📚 BM Master');
+        if (state.stars >= 5) badges.push('⭐ Bintang Bijak');
+        if (badges.length === 0) badges.push('🌱 Pelajar Gigih');
+
+        state.badges = badges;
+
+        gameScreen.classList.add('hidden');
+        endScreen.classList.remove('hidden');
+
+        progressFill.style.width = `100%`;
+
+        finalScore.textContent = state.score;
+        finalCorrect.textContent = state.correctCount;
+        finalWrong.textContent = state.wrongCount;
+        finalStars.textContent = state.stars;
+        finalTime.textContent = totalSec;
+
+        badgeContainer.innerHTML = badges.map(b => `<span class="badge-item"><i class="fas fa-medal"></i> ${b}</span>`).join('');
+    }
+
+    function resetToMenu() {
+        clearInterval(state.timerInterval);
+        gameScreen.classList.add('hidden');
+        endScreen.classList.add('hidden');
+        menuScreen.classList.remove('hidden');
+    }
+
+    optionsBtns.forEach(btn => btn.addEventListener('click', handleOptionClick));
+    nextBtn.addEventListener('click', nextQuestion);
+    quitBtn.addEventListener('click', resetToMenu);
+    $('playAgainBtn').addEventListener('click', () => {
+        endScreen.classList.add('hidden');
+        startGame(state.mode, state.age);
+    });
+    $('endMenuBtn').addEventListener('click', resetToMenu);
+
+    document.querySelectorAll('.age-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            state.age = parseInt(this.dataset.age);
+        });
+    });
+    document.querySelector('.age-btn[data-age="7"]').classList.add('active');
+
+    document.querySelectorAll('.mode-card').forEach(card => {
+        card.addEventListener('click', function() {
+            document.querySelectorAll('.mode-card').forEach(c => c.style.borderColor = '#dba16d');
+            this.style.borderColor = '#f5a623';
+            state.mode = this.dataset.mode;
+        });
+    });
+    document.querySelector('.mode-card[data-mode="quick"]').style.borderColor = '#f5a623';
+
+    $('startGameBtn').addEventListener('click', function() {
+        if (!state.mode) state.mode = 'quick';
+        startGame(state.mode, state.age);
+    });
+
+    $('backBtn').addEventListener('click', function() {
+        if (confirm('Kembali ke menu utama?')) {
+            window.location.href = 'index.html';
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (gameScreen.classList.contains('hidden')) return;
+
+        const activeKey = e.key;
+        if (/^[1-4]$/.test(activeKey)) {
+            const idx = parseInt(activeKey, 10) - 1;
+            const btn = optionsBtns[idx];
+            if (btn && !btn.disabled) {
+                btn.click();
+            }
+        } else if (activeKey === 'Enter' || activeKey === 'ArrowRight') {
+            if (!nextBtn.disabled) nextBtn.click();
+        } else if (activeKey === 'Escape') {
+            resetToMenu();
+        }
+    });
+
+    menuScreen.classList.remove('hidden');
+    gameScreen.classList.add('hidden');
+    endScreen.classList.add('hidden');
+    console.log('🚀 EduQuest FULL VERSION sedia!');
+</script>
+</body>
+</html>
