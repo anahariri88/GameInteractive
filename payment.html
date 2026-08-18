@@ -601,7 +601,7 @@
 
             <div class="terms-box">
                 <input type="checkbox" id="termsCheckbox" required>
-                <label for="termsCheckbox">Saya telah mentransfer RM 29.90 ke akaun yang dinyatakan dan bersetuju dengan syarat & ketentuan.</label>
+                <label for="termsCheckbox">Saya telah mentransfer RM 9.90 ke akaun yang dinyatakan dan bersetuju dengan syarat & ketentuan.</label>
             </div>
         </div>
 
@@ -610,7 +610,32 @@
             <button class="btn btn-secondary" onclick="goBack()">
                 <i class="fas fa-arrow-left"></i> Kembali
             </button>
-            <button class="btn btn-primary" id="submitBtn" onclick="submitPayment()" style="display: none;">
+            <button class="btn btn-primary" id="submitBtn" onclick="submitPayment()" function submitPayment() {
+  // Ambil data dari borang awak
+  let nama = document.getElementById('userName').value;
+  let email = document.getElementById('userContact').value;
+  let kaedah = "Touch n Go"; // atau pindahan bank ikut kesesuaian
+  let jumlah = "RM 9.90";
+  let tarikh = new Date().toLocaleDateString('ms-MY');
+
+  // Simpan ke senarai tempatan
+  let senarai = JSON.parse(localStorage.getItem('senaraiBayaran') || '[]');
+  senarai.unshift({
+    id: Date.now(),
+    tarikh: tarikh,
+    nama: nama,
+    email: email,
+    kaedah: kaedah,
+    jumlah: jumlah,
+    status: "pending"
+  });
+  localStorage.setItem('senaraiBayaran', JSON.stringify(senarai));
+
+  alert("✅ Maklumat disimpan! Pergi ke Dashboard Admin untuk sahkan.");
+  
+  // Tutup pop-up atau pergi ke halaman lain jika perlu
+  // window.location.href = "index.html";
+} style="display: none;">
                 <i class="fas fa-check"></i> Sahkan
             </button>
         </div>
@@ -778,6 +803,41 @@
 
         // Initialize
         console.log('💳 Halaman Pembayaran EduQuest FULL VERSION sedia!');
+    </script>
+</script>
+    <script>
+function tukarStatus(idBaris, jenis) {
+  let selStatus = document.getElementById('status-' + idBaris);
+  if (!selStatus) return;
+  if (jenis === 'approved') {
+    selStatus.innerHTML = '<span style="color:green; background:#d4edda; padding:2px 6px; border-radius:4px;">Diluluskan</span>';
+  } else if (jenis === 'rejected') {
+    selStatus.innerHTML = '<span style="color:red; background:#f8d7da; padding:2px 6px; border-radius:4px;">Ditolak</span>';
+  }
+  alert("Status dikemaskini ✅");
+}
+
+function tambahPembayaran(tarikh, nama, email, cara, jumlah) {
+  let body = document.getElementById('tableBody');
+  let tiadaData = document.querySelector('#tableBody td[colspan="7"]');
+  if (tiadaData) tiadaData.parentElement.remove();
+
+  let id = Date.now();
+  body.insertAdjacentHTML('beforeend', `
+    <tr id="row-${id}">
+      <td>${tarikh}</td>
+      <td>${nama}</td>
+      <td>${email}</td>
+      <td>${cara}</td>
+      <td>${jumlah}</td>
+      <td id="status-${id}"><span style="color:orange; background:#fff3cd; padding:2px 6px; border-radius:4px;">Menunggu</span></td>
+      <td>
+        <button onclick="tukarStatus(${id}, 'approved')" style="background:green; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">✅ Lulus</button>
+        <button onclick="tukarStatus(${id}, 'rejected')" style="background:red; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">❌ Tolak</button>
+      </td>
+    </tr>
+  `);
+}
     </script>
 </body>
 </html>
