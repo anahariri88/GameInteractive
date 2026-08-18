@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes"/>
+    <title>EduQuest - Game Interaktif Pendidikan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(145deg, #f9e8b4 0%, #f4d78a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .game-container {
+            max-width: 520px;
+            width: 100%;
+            background: #fff8e7;
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 8px 16px rgba(0,0,0,0.1);
+            padding: 24px 20px 32px;
+            position: relative;
+            transition: all 0.2s;
+            border: 4px solid #ffb347;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffcf8a;
+            padding: 10px 16px;
+            border-radius: 60px;
+            margin-bottom: 20px;
+            color: #3d2b1a;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-wrap: wrap;
+        }
+        .avatar-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .avatar-box i {
+            font-size: 2rem;
+            color: #5d3a1a;
+            background: #ffe3b0;
+            padding: 6px;
+            border-radius: 50%;
+        }
+        .stars-box {
+            background: #fcedb3;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            color: #b8860b;
+        }
+        .score-box {
+            background: #4a7c59;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 30px;
+        }
+        .progress-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #4d3e2b;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 14px;
+            background: #e5d5b0;
+            border-radius: 30px;
+            margin: 6px 0 18px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f9b83a, #f5a623);
+            border-radius: 30px;
+            transition: width 0.2s;
+        }
+        .question-box {
+            background: white;
+            border-radius: 40px;
+            padding: 20px 18px;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.02), 0 8px 18px rgba(0,0,0,0.05);
+            margin-bottom: 18px;
+        }
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2f1f0e;
+            line-height: 1.4;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+        }
+        .timer-box {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #a0522d;
+            margin-top: 6px;
+        }
+        .timer-circle {
+            background: #e9dac7;
+            padding: 2px 14px;
+            border-radius: 40px;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0 10px;
+        }
+        .option-btn {
+            background: #fef6e9;
+            border: 3px solid #dbbd91;
+            border-radius: 60px;
+            padding: 14px 6px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2f1f0e;
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 0 #b3926a;
+            cursor: pointer;
+            text-align: center;
+            word-break: break-word;
+        }
+        .option-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 0 #b3926a;
+        }
+        .option-btn.correct {
+            background: #8bc34a;
+            border-color: #558b2f;
+            box-shadow: 0 4px 0 #33691e;
+            color: white;
+        }
+        .option-btn.wrong {
+            background: #ef9a9a;
+            border-color: #c62828;
+            box-shadow: 0 4px 0 #b71c1c;
+            color: white;
+        }
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .feedback-box {
+            background: #fcf3e0;
+            border-radius: 30px;
+            padding: 14px 18px;
+            margin: 12px 0 6px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            border-left: 8px solid #f5b342;
+        }
+        .feedback-box i {
+            font-size: 1.8rem;
+        }
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 18px;
+        }
+        .btn {
+            background: #ffb74d;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2f1f0e;
+            box-shadow: 0 6px 0 #c47f2b;
+            transition: 0.07s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid #f5a623;
+        }
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #c47f2b;
+        }
+        .btn-secondary {
+            background: #b0bec5;
+            box-shadow: 0 6px 0 #78909c;
+            border-color: #90a4ae;
+            color: #1c2a35;
+        }
+        .btn-success {
+            background: #66bb6a;
+            box-shadow: 0 6px 0 #2e7d32;
+            border-color: #43a047;
+            color: white;
+        }
+        .btn-small {
+            padding: 8px 18px;
+            font-size: 0.9rem;
+        }
+        .menu-screen {
+            text-align: center;
+        }
+        .menu-screen h1 {
+            font-size: 2.8rem;
+            color: #4d2e1b;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+        .menu-screen .sub {
+            font-size: 1.2rem;
+            color: #6b4c2c;
+            margin-bottom: 24px;
+        }
+        .age-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .age-btn {
+            background: #ffd9a3;
+            border: 3px solid #b58a5a;
+            border-radius: 60px;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #2f1f0e;
+            flex: 1 0 auto;
+            max-width: 140px;
+        }
+        .age-btn.active {
+            background: #f5a623;
+            border-color: #7f5700;
+            color: white;
+            box-shadow: 0 4px 0 #7f5700;
+        }
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+            margin: 20px 0;
+        }
+        .mode-card {
+            background: #ffead0;
+            border-radius: 30px;
+            padding: 18px 6px;
+            border: 3px solid #dba16d;
+            cursor: pointer;
+            transition: 0.1s;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 6px 0 #b87d4b;
+        }
+        .mode-card:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #b87d4b;
+        }
+        .mode-card i {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .mode-card.selected {
+            border-color: #f5a623;
+            background: #ffd9a3;
+        }
+        .end-screen {
+            text-align: center;
+        }
+        .end-screen .big-icon {
+            font-size: 4rem;
+        }
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 16px 0;
+        }
+        .badge-item {
+            background: #ffd966;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 2px solid #b47d44;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .mt-2 { margin-top: 12px; }
+        .mb-1 { margin-bottom: 8px; }
+        .text-center { text-align: center; }
+        .flex-center { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .version-tag {
+            background: #4a7c59;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+        @media (max-width: 480px) {
+            .question-text { font-size: 1.2rem; }
+            .option-btn { font-size: 1rem; padding: 12px 4px; }
+            .mode-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="game-container" id="app">
+    <!-- MENU UTAMA -->
+    <div id="menuScreen" class="menu-screen">
+        <h1>🌟 EduQuest</h1>
+        <div class="sub">Belajar sambil bermain!</div>
+        <div style="margin-bottom:10px;">
+            <span class="version-tag"><i class="fas fa-check-circle"></i> FULL VERSION</span>
+            <span class="version-tag" style="background:#f5a623;"><i class="fas fa-database"></i> 100 Soalan/Subjek</span>
+        </div>
+        <div class="avatar-box" style="justify-content:center; margin-bottom:10px;">
+            <i class="fas fa-user-astronaut" style="font-size:3rem;"></i>
+        </div>
+        <p style="font-weight:600;">Pilih umur anda:</p>
+        <div class="age-selector" id="ageSelector">
+            <button class="age-btn" data-age="7">7–8 thn</button>
+            <button class="age-btn" data-age="9">9–10 thn</button>
+            <button class="age-btn" data-age="11">11–12 thn</button>
+        </div>
+        <p style="font-weight:600; margin-top:10px;">Pilih mode:</p>
+        <div class="mode-grid" id="modeGrid">
+            <div class="mode-card selected" data-mode="quick"><i class="fas fa-bolt"></i> Quick</div>
+            <div class="mode-card" data-mode="math"><i class="fas fa-calculator"></i> Matematik</div>
+            <div class="mode-card" data-mode="bm"><i class="fas fa-language"></i> BM</div>
+            <div class="mode-card" data-mode="eng"><i class="fas fa-font"></i> English</div>
+            <div class="mode-card" data-mode="sains"><i class="fas fa-flask"></i> Sains</div>
+            <div class="mode-card" data-mode="daily"><i class="fas fa-calendar-day"></i> Daily</div>
+        </div>
+        <div style="margin: 14px 0;">
+            <button class="btn btn-success" id="startGameBtn"><i class="fas fa-play"></i> Mula!</button>
+        </div>
+        <div style="font-size:0.9rem; background:#f5e4c2; border-radius:40px; padding:10px;">
+            <i class="fas fa-star" style="color:#f5a623;"></i> 100 soalan setiap subjek | Pembelajaran interaktif
+        </div>
+    </div>
+
+    <!-- SKRIN GAME -->
+    <div id="gameScreen" class="hidden">
+        <div class="header">
+            <div class="avatar-box"><i class="fas fa-user-astronaut"></i> <span id="playerName">Peneroka</span></div>
+            <div class="stars-box"><i class="fas fa-star"></i> <span id="starCount">0</span></div>
+            <div class="score-box"><i class="fas fa-trophy"></i> <span id="scoreDisplay">0</span></div>
+        </div>
+        <div class="progress-area">
+            <span id="questionCounter">Soalan 1/10</span>
+            <span id="modeLabel">Quick</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+
+        <div class="question-box">
+            <div class="question-text" id="questionText">Soalan akan muncul di sini</div>
+            <div class="timer-box"><i class="fas fa-hourglass-half"></i> <span class="timer-circle" id="timerDisplay">20s</span></div>
+        </div>
+
+        <div class="options-grid" id="optionsContainer">
+            <button class="option-btn" data-index="0">A</button>
+            <button class="option-btn" data-index="1">B</button>
+            <button class="option-btn" data-index="2">C</button>
+            <button class="option-btn" data-index="3">D</button>
+        </div>
+
+        <div class="feedback-box" id="feedbackBox"><i class="fas fa-lightbulb"></i> <span id="feedbackText">Pilih jawapan!</span></div>
+
+        <div class="action-bar">
+            <button class="btn btn-secondary btn-small" id="quitBtn"><i class="fas fa-home"></i> Menu</button>
+            <button class="btn btn-small" id="nextBtn" disabled><i class="fas fa-arrow-right"></i> Seterusnya</button>
+        </div>
+    </div>
+
+    <!-- SKRIN TAMAT -->
+    <div id="endScreen" class="end-screen hidden">
+        <div class="big-icon">🎉</div>
+        <h2 style="font-size:2.2rem; color:#3d2b1a;">Tahniah!</h2>
+        <div style="font-size:1.2rem; margin:8px 0;">Anda hebat!</div>
+        <div class="badge-container" id="badgeContainer"></div>
+        <div style="background:#f5e4c2; border-radius:40px; padding:16px; margin:12px 0;">
+            <p><i class="fas fa-star"></i> Markah: <strong id="finalScore">0</strong></p>
+            <p>✅ Betul: <span id="finalCorrect">0</span> &nbsp;|&nbsp; ❌ Salah: <span id="finalWrong">0</span></p>
+            <p>⭐ Bintang: <span id="finalStars">0</span> &nbsp;|&nbsp; 🕒 Masa: <span id="finalTime">0</span>s</p>
+        </div>
+        <div class="flex-center">
+            <button class="btn" id="playAgainBtn"><i class="fas fa-redo"></i> Main Lagi</button>
+            <button class="btn btn-secondary" id="endMenuBtn"><i class="fas fa-home"></i> Menu</button>
+        </div>
+        <p style="margin-top:14px; font-weight:600;">Hebat! Teruskan belajar dan cuba pecahkan rekod anda!</p>
+    </div>
+</div>
+
+<script>
+// ============================================================
+//  BANK SOALAN - 100 SOALAN SETIAP SUBJEK
+// ============================================================
+
+const SOALAN = {
+    math: [
+        // 1-10
+        { q: "Berapakah 8 + 7?", options: ["13","14","15","16"], ans: 2 },
+        { q: "Berapakah 12 - 5?", options: ["5","6","7","8"], ans: 2 },
+        { q: "Berapakah 6 × 4?", options: ["20","24","26","28"], ans: 1 },
+        { q: "Berapakah 15 ÷ 3?", options: ["3","4","5","6"], ans: 2 },
+        { q: "Apakah 1/2 + 1/2?", options: ["1/2","1","3/2","2"], ans: 1 },
+        { q: "Berapakah 100 + 50?", options: ["120","150","160","200"], ans: 1 },
+        { q: "Berapakah 7 × 8?", options: ["48","54","56","64"], ans: 2 },
+        { q: "Berapakah 20 - 8?", options: ["10","11","12","13"], ans: 2 },
+        { q: "Berapakah 9 × 3?", options: ["24","27","30","33"], ans: 1 },
+        { q: "Berapakah 18 ÷ 6?", options: ["2","3","4","5"], ans: 1 },
+        // 11-20
+        { q: "Berapakah 25 + 17?", options: ["40","42","43","45"], ans: 1 },
+        { q: "Berapakah 50 - 28?", options: ["20","22","23","25"], ans: 1 },
+        { q: "Berapakah 8 × 7?", options: ["48","54","56","58"], ans: 2 },
+        { q: "Berapakah 72 ÷ 8?", options: ["7","8","9","10"], ans: 2 },
+        { q: "Apakah 3/4 daripada 20?", options: ["10","12","15","18"], ans: 2 },
+        { q: "Berapakah 250 + 150?", options: ["300","350","400","450"], ans: 2 },
+        { q: "Berapakah 12 × 12?", options: ["120","132","144","156"], ans: 2 },
+        { q: "Berapakah 100 - 43?", options: ["47","57","67","77"], ans: 1 },
+        { q: "Berapakah 11 × 9?", options: ["89","97","99","101"], ans: 2 },
+        { q: "Berapakah 64 ÷ 8?", options: ["6","7","8","9"], ans: 2 },
+        // 21-30
+        { q: "Berapakah 35 + 26?", options: ["51","61","71","81"], ans: 1 },
+        { q: "Berapakah 80 - 37?", options: ["33","43","53","63"], ans: 1 },
+        { q: "Berapakah 5 × 9?", options: ["35","40","45","50"], ans: 2 },
+        { q: "Berapakah 56 ÷ 7?", options: ["6","7","8","9"], ans: 2 },
+        { q: "Apakah 2/5 daripada 25?", options: ["5","10","12","15"], ans: 1 },
+        { q: "Berapakah 300 + 275?", options: ["475","525","575","625"], ans: 2 },
+        { q: "Berapakah 15 × 6?", options: ["80","85","90","95"], ans: 2 },
+        { q: "Berapakah 200 - 88?", options: ["102","112","122","132"], ans: 1 },
+        { q: "Berapakah 14 × 7?", options: ["88","94","98","102"], ans: 2 },
+        { q: "Berapakah 81 ÷ 9?", options: ["7","8","9","10"], ans: 2 },
+        // 31-40
+        { q: "Berapakah 47 + 38?", options: ["75","85","95","105"], ans: 1 },
+        { q: "Berapakah 150 - 75?", options: ["65","70","75","80"], ans: 2 },
+        { q: "Berapakah 16 × 5?", options: ["70","75","80","85"], ans: 2 },
+        { q: "Berapakah 96 ÷ 12?", options: ["6","7","8","9"], ans: 2 },
+        { q: "Apakah 1/4 daripada 100?", options: ["20","25","30","35"], ans: 1 },
+        { q: "Berapakah 425 + 175?", options: ["500","600","700","800"], ans: 1 },
+        { q: "Berapakah 13 × 8?", options: ["94","98","104","108"], ans: 2 },
+        { q: "Berapakah 300 - 149?", options: ["141","151","161","171"], ans: 1 },
+        { q: "Berapakah 17 × 6?", options: ["92","96","100","102"], ans: 3 },
+        { q: "Berapakah 144 ÷ 12?", options: ["10","11","12","13"], ans: 2 },
+        // 41-50
+        { q: "Berapakah 56 + 39?", options: ["85","89","95","99"], ans: 2 },
+        { q: "Berapakah 250 - 135?", options: ["105","115","125","135"], ans: 1 },
+        { q: "Berapakah 21 × 4?", options: ["74","80","84","88"], ans: 2 },
+        { q: "Berapakah 108 ÷ 9?", options: ["10","11","12","13"], ans: 2 },
+        { q: "Apakah 3/5 daripada 50?", options: ["20","25","30","35"], ans: 2 },
+        { q: "Berapakah 675 + 225?", options: ["800","850","900","950"], ans: 2 },
+        { q: "Berapakah 19 × 5?", options: ["85","90","95","100"], ans: 2 },
+        { q: "Berapakah 400 - 178?", options: ["212","222","232","242"], ans: 1 },
+        { q: "Berapakah 22 × 6?", options: ["122","128","132","138"], ans: 2 },
+        { q: "Berapakah 168 ÷ 14?", options: ["10","11","12","13"], ans: 2 },
+        // 51-60
+        { q: "Berapakah 67 + 28?", options: ["85","89","93","95"], ans: 3 },
+        { q: "Berapakah 300 - 167?", options: ["123","133","143","153"], ans: 1 },
+        { q: "Berapakah 18 × 7?", options: ["116","122","126","132"], ans: 2 },
+        { q: "Berapakah 126 ÷ 14?", options: ["7","8","9","10"], ans: 2 },
+        { q: "Apakah 2/3 daripada 27?", options: ["15","16","17","18"], ans: 3 },
+        { q: "Berapakah 825 + 175?", options: ["900","950","1000","1050"], ans: 2 },
+        { q: "Berapakah 23 × 8?", options: ["174","178","184","188"], ans: 2 },
+        { q: "Berapakah 500 - 247?", options: ["243","253","263","273"], ans: 1 },
+        { q: "Berapakah 24 × 7?", options: ["148","158","168","178"], ans: 2 },
+        { q: "Berapakah 192 ÷ 16?", options: ["10","11","12","13"], ans: 2 },
+        // 61-70
+        { q: "Berapakah 78 + 56?", options: ["124","134","144","154"], ans: 1 },
+        { q: "Berapakah 450 - 238?", options: ["202","212","222","232"], ans: 1 },
+        { q: "Berapakah 25 × 8?", options: ["180","190","200","210"], ans: 2 },
+        { q: "Berapakah 216 ÷ 18?", options: ["10","11","12","13"], ans: 2 },
+        { q: "Apakah 5/8 daripada 64?", options: ["30","35","40","45"], ans: 2 },
+        { q: "Berapakah 925 + 75?", options: ["950","975","1000","1025"], ans: 2 },
+        { q: "Berapakah 26 × 9?", options: ["224","234","244","254"], ans: 1 },
+        { q: "Berapakah 600 - 389?", options: ["201","211","221","231"], ans: 1 },
+        { q: "Berapakah 27 × 6?", options: ["152","162","172","182"], ans: 1 },
+        { q: "Berapakah 224 ÷ 16?", options: ["12","13","14","15"], ans: 2 },
+        // 71-80
+        { q: "Berapakah 89 + 67?", options: ["146","156","166","176"], ans: 1 },
+        { q: "Berapakah 550 - 276?", options: ["264","274","284","294"], ans: 1 },
+        { q: "Berapakah 28 × 9?", options: ["242","252","262","272"], ans: 1 },
+        { q: "Berapakah 288 ÷ 24?", options: ["10","11","12","13"], ans: 2 },
+        { q: "Apakah 3/7 daripada 42?", options: ["15","16","17","18"], ans: 3 },
+        { q: "Berapakah 1075 + 425?", options: ["1400","1450","1500","1550"], ans: 2 },
+        { q: "Berapakah 29 × 7?", options: ["193","203","213","223"], ans: 1 },
+        { q: "Berapakah 700 - 438?", options: ["252","262","272","282"], ans: 1 },
+        { q: "Berapakah 31 × 9?", options: ["269","279","289","299"], ans: 1 },
+        { q: "Berapakah 336 ÷ 28?", options: ["10","11","12","13"], ans: 2 },
+        // 81-90
+        { q: "Berapakah 97 + 86?", options: ["173","183","193","203"], ans: 1 },
+        { q: "Berapakah 650 - 347?", options: ["293","303","313","323"], ans: 1 },
+        { q: "Berapakah 32 × 8?", options: ["246","256","266","276"], ans: 1 },
+        { q: "Berapakah 384 ÷ 32?", options: ["10","11","12","13"], ans: 2 },
+        { q: "Apakah 4/9 daripada 81?", options: ["28","32","36","40"], ans: 2 },
+        { q: "Berapakah 1225 + 375?", options: ["1500","1550","1600","1650"], ans: 2 },
+        { q: "Berapakah 34 × 9?", options: ["296","306","316","326"], ans: 1 },
+        { q: "Berapakah 800 - 479?", options: ["311","321","331","341"], ans: 1 },
+        { q: "Berapakah 36 × 7?", options: ["242","252","262","272"], ans: 1 },
+        { q: "Berapakah 432 ÷ 36?", options: ["10","11","12","13"], ans: 2 },
+        // 91-100
+        { q: "Berapakah 108 + 97?", options: ["195","205","215","225"], ans: 1 },
+        { q: "Berapakah 750 - 468?", options: ["272","282","292","302"], ans: 1 },
+        { q: "Berapakah 38 × 9?", options: ["332","342","352","362"], ans: 1 },
+        { q: "Berapakah 504 ÷ 42?", options: ["10","11","12","13"], ans: 2 },
+        { q: "Apakah 5/12 daripada 60?", options: ["20","23","25","28"], ans: 2 },
+        { q: "Berapakah 1375 + 625?", options: ["1900","1950","2000","2050"], ans: 2 },
+        { q: "Berapakah 41 × 8?", options: ["318","328","338","348"], ans: 1 },
+        { q: "Berapakah 900 - 537?", options: ["353","363","373","383"], ans: 1 },
+        { q: "Berapakah 43 × 9?", options: ["377","387","397","407"], ans: 1 },
+        { q: "Berapakah 576 ÷ 48?", options: ["10","11","12","13"], ans: 2 }
+    ],
+    bm: [
+        // 1-10
+        { q: "Apakah kata kerja dalam ayat 'Ali berlari di padang.'?", options: ["Ali","padang","berlari","di"], ans: 2 },
+        { q: "Apakah kata nama dalam ayat 'Ibu memasak nasi.'?", options: ["Ibu","memasak","nasi","di"], ans: 0 },
+        { q: "Sinonim bagi 'cantik' ialah?", options: ["jelita","hodoh","kecil","besar"], ans: 0 },
+        { q: "Antonim bagi 'panas' ialah?", options: ["sejuk","hangat","basi","masam"], ans: 0 },
+        { q: "Ejaan yang betul?", options: ["kereta","kreta","kareta","keretaa"], ans: 0 },
+        { q: "Susun perkataan: 'saya / ke / sekolah / pergi'", options: ["Saya pergi ke sekolah","Saya ke sekolah pergi","Pergi saya ke sekolah","Ke sekolah saya pergi"], ans: 0 },
+        { q: "Apakah maksud 'gembira'?", options: ["sedih","marah","seronok","takut"], ans: 2 },
+        { q: "Kata adjektif bagi 'tinggi'?", options: ["rendah","besar","kecil","panjang"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Adik bermain bola","Adik main bola","Adik bermain bolah","Adik mainkan bola"], ans: 0 },
+        { q: "Kata nama khas?", options: ["Ali","budak","rumah","buku"], ans: 0 },
+        // 11-20
+        { q: "Apakah kata kerja dalam 'Kakak menyanyi dengan merdu.'?", options: ["Kakak","menyanyi","merdu","dengan"], ans: 1 },
+        { q: "Sinonim bagi 'besar'?", options: ["kecil","luas","tinggi","panjang"], ans: 1 },
+        { q: "Antonim bagi 'murah'?", options: ["mahal","rendah","tinggi","kecil"], ans: 0 },
+        { q: "Ejaan betul?", options: ["basikal","biskeal","besikal","basikal"], ans: 0 },
+        { q: "Susun: 'adik / buku / membaca / sedang'", options: ["Adik sedang membaca buku","Adik membaca buku sedang","Sedang adik membaca buku","Membaca buku adik sedang"], ans: 0 },
+        { q: "Maksud 'ceria'?", options: ["sedih","gembira","marah","takut"], ans: 1 },
+        { q: "Kata adjektif bagi 'cepat'?", options: ["perlahan","laju","lambat","pantas"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Mereka ke sekolah berjalan","Mereka berjalan ke sekolah","Mereka berjalan ke sekolah","Berjalan mereka ke sekolah"], ans: 1 },
+        { q: "Kata nama am?", options: ["Malaysia","Ahmad","buku","Kuala Lumpur"], ans: 2 },
+        { q: "Kata kerja dalam 'Burung terbang tinggi.'?", options: ["Burung","terbang","tinggi","di"], ans: 1 },
+        // 21-30
+        { q: "Sinonim bagi 'rajin'?", options: ["malas","berusaha","pintar","pandai"], ans: 1 },
+        { q: "Antonim bagi 'terang'?", options: ["gelap","cerah","benderang","bersinar"], ans: 0 },
+        { q: "Ejaan betul?", options: ["sekolah","skolah","sekolahh","sekoloh"], ans: 0 },
+        { q: "Susun: 'di / bermain / kanak-kanak / taman'", options: ["Kanak-kanak bermain di taman","Di taman kanak-kanak bermain","Bermain kanak-kanak di taman","Taman kanak-kanak bermain di"], ans: 0 },
+        { q: "Maksud 'bijak'?", options: ["bodoh","pintar","malas","baik"], ans: 1 },
+        { q: "Kata adjektif bagi 'berani'?", options: ["pengecut","takut","gagah","perkasa"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Saya suka makan nasi","Saya suka nasi makan","Suka saya makan nasi","Nasi saya suka makan"], ans: 0 },
+        { q: "Kata nama khas?", options: ["negeri","Selangor","bandar","kampung"], ans: 1 },
+        { q: "Kata kerja dalam 'Ibu membeli sayur.'?", options: ["Ibu","membeli","sayur","di"], ans: 1 },
+        { q: "Sinonim bagi 'cepat'?", options: ["lambat","perlahan","pantas","lembab"], ans: 2 },
+        // 31-40
+        { q: "Antonim bagi 'jauh'?", options: ["dekat","dekat","jauh","tinggi"], ans: 0 },
+        { q: "Ejaan betul?", options: ["pensil","pensel","pensil","pensil"], ans: 0 },
+        { q: "Susun: 'makan / sedang / mereka / nasi'", options: ["Mereka sedang makan nasi","Sedang mereka makan nasi","Makan nasi mereka sedang","Nasi mereka sedang makan"], ans: 0 },
+        { q: "Maksud 'berani'?", options: ["takut","gagah","berani","pengecut"], ans: 2 },
+        { q: "Kata adjektif bagi 'kecil'?", options: ["besar","kecil","rendah","tinggi"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Kucing itu comel","Itu kucing comel","Comel kucing itu","Kucing comel itu"], ans: 0 },
+        { q: "Kata nama am?", options: ["Ipoh","Cikgu Ali","kereta","Ahmad"], ans: 2 },
+        { q: "Kata kerja dalam 'Anjing menyalak kuat.'?", options: ["Anjing","menyalak","kuat","di"], ans: 1 },
+        { q: "Sinonim bagi 'marah'?", options: ["gembira","berang","sedih","takut"], ans: 1 },
+        { q: "Antonim bagi 'tinggi'?", options: ["rendah","panjang","besar","lebar"], ans: 0 },
+        // 41-50
+        { q: "Ejaan betul?", options: ["bunga","bungah","bunga","bungga"], ans: 0 },
+        { q: "Susun: 'pergi / ke / kami / pasar'", options: ["Kami pergi ke pasar","Pergi kami ke pasar","Ke pasar kami pergi","Pasar kami pergi ke"], ans: 0 },
+        { q: "Maksud 'sabar'?", options: ["cepat marah","tenang","gelisah","gusar"], ans: 1 },
+        { q: "Kata adjektif bagi 'berat'?", options: ["ringan","kecil","besar","panjang"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Dia sedang membaca buku","Dia membaca sedang buku","Sedang dia buku membaca","Buku dia sedang membaca"], ans: 0 },
+        { q: "Kata nama khas?", options: ["gunung","Kinabalu","bukit","sungai"], ans: 1 },
+        { q: "Kata kerja dalam 'Kami menonton wayang.'?", options: ["Kami","menonton","wayang","di"], ans: 1 },
+        { q: "Sinonim bagi 'baik'?", options: ["jahat","mulia","busuk","kotor"], ans: 1 },
+        { q: "Antonim bagi 'muda'?", options: ["tua","anak","budak","remaja"], ans: 0 },
+        { q: "Ejaan betul?", options: ["gajah","gajjah","gaja","gajh"], ans: 0 },
+        // 51-60
+        { q: "Susun: 'bermain / di / mereka / padang'", options: ["Mereka bermain di padang","Bermain mereka di padang","Di padang mereka bermain","Padang mereka bermain di"], ans: 0 },
+        { q: "Maksud 'kaya'?", options: ["miskin","berharta","mewah","mulia"], ans: 1 },
+        { q: "Kata adjektif bagi 'lama'?", options: ["baru","lama","tua","usang"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Saya pandai","Pandai saya","Saya pandai","Saya pandai"], ans: 0 },
+        { q: "Kata nama am?", options: ["Sungai Pahang","Malaysia","meja","Ahmad"], ans: 2 },
+        { q: "Kata kerja dalam 'Ayah memandu kereta.'?", options: ["Ayah","memandu","kereta","di"], ans: 1 },
+        { q: "Sinonim bagi 'sesat'?", options: ["keliru","hilang","tersesat","tersalah"], ans: 2 },
+        { q: "Antonim bagi 'sopan'?", options: ["biadab","baik","mulia","santun"], ans: 0 },
+        { q: "Ejaan betul?", options: ["laporan","lapuran","laporran","lapuran"], ans: 0 },
+        { q: "Susun: 'adik / sedang / tidur / di / bilik'", options: ["Adik sedang tidur di bilik","Di bilik adik sedang tidur","Tidur adik sedang di bilik","Bilik adik sedang tidur di"], ans: 0 },
+        // 61-70
+        { q: "Maksud 'berani'?", options: ["takut","gagah","berani","pengecut"], ans: 2 },
+        { q: "Kata adjektif bagi 'cerah'?", options: ["gelap","cerah","terang","benderang"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Mereka makan di restoran","Mereka di restoran makan","Di restoran mereka makan","Makan mereka di restoran"], ans: 0 },
+        { q: "Kata nama khas?", options: ["hospital","Langkawi","sekolah","pejabat"], ans: 1 },
+        { q: "Kata kerja dalam 'Emak menggoreng ikan.'?", options: ["Emak","menggoreng","ikan","di"], ans: 1 },
+        { q: "Sinonim bagi 'malas'?", options: ["rajin","pemalas","lesu","lapar"], ans: 1 },
+        { q: "Antonim bagi 'bahagia'?", options: ["gembira","sedih","ceria","seronok"], ans: 1 },
+        { q: "Ejaan betul?", options: ["majalah","majalah","majallah","majalah"], ans: 0 },
+        { q: "Susun: 'di / sedang / membaca / dia / perpustakaan'", options: ["Dia sedang membaca di perpustakaan","Di perpustakaan dia sedang membaca","Membaca dia di perpustakaan","Sedang dia membaca di perpustakaan"], ans: 0 },
+        { q: "Maksud 'kering'?", options: ["basah","kering","lembap","becek"], ans: 1 },
+        // 71-80
+        { q: "Kata adjektif bagi 'tua'?", options: ["muda","baru","tua","usang"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Saya nak pergi ke sekolah","Saya ke sekolah nak pergi","Nak saya pergi ke sekolah","Ke sekolah saya nak pergi"], ans: 0 },
+        { q: "Kata nama am?", options: ["Johor","Taman Negara","pensel","Aiman"], ans: 2 },
+        { q: "Kata kerja dalam 'Burung berkicau dengan merdu.'?", options: ["Burung","berkicau","merdu","dengan"], ans: 1 },
+        { q: "Sinonim bagi 'gemuk'?", options: ["kurus","tambun","tinggi","rendah"], ans: 1 },
+        { q: "Antonim bagi 'berat'?", options: ["ringan","kecil","besar","panjang"], ans: 0 },
+        { q: "Ejaan betul?", options: ["komputer","kompouter","komputer","kompiter"], ans: 0 },
+        { q: "Susun: 'makan / kita / nasi / di / pagi'", options: ["Kita makan nasi di pagi","Di pagi kita makan nasi","Nasi kita makan di pagi","Makan kita nasi di pagi"], ans: 0 },
+        { q: "Maksud 'cerdik'?", options: ["bodoh","pintar","malas","baik"], ans: 1 },
+        { q: "Kata adjektif bagi 'tajam'?", options: ["tumpul","tajam","runcing","cerah"], ans: 0 },
+        // 81-90
+        { q: "Ayat yang betul?", options: ["Dia suka bermain bola","Suka dia bermain bola","Bermain dia suka bola","Bola dia suka bermain"], ans: 0 },
+        { q: "Kata nama khas?", options: ["negeri","Perak","bandar","kampung"], ans: 1 },
+        { q: "Kata kerja dalam 'Kami berjalan di taman.'?", options: ["Kami","berjalan","taman","di"], ans: 1 },
+        { q: "Sinonim bagi 'bijak'?", options: ["bodoh","pandai","malas","baik"], ans: 1 },
+        { q: "Antonim bagi 'tanam'?", options: ["cangkul","cabut","siram","baja"], ans: 1 },
+        { q: "Ejaan betul?", options: ["ketam","ketem","ketam","ketum"], ans: 0 },
+        { q: "Susun: 'menonton / televisyen / sedang / mereka'", options: ["Mereka sedang menonton televisyen","Sedang mereka menonton televisyen","Menonton mereka sedang televisyen","Televisyen mereka sedang menonton"], ans: 0 },
+        { q: "Maksud 'lambat'?", options: ["cepat","perlahan","pantas","laju"], ans: 1 },
+        { q: "Kata adjektif bagi 'busuk'?", options: ["wangi","harum","busuk","cemar"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Kakak membuat kek","Kakak kek membuat","Membuat kakak kek","Kek kakak membuat"], ans: 0 },
+        // 91-100
+        { q: "Kata nama am?", options: ["Gunung Everest","Pulau Pinang","kerusi","Abdul"], ans: 2 },
+        { q: "Kata kerja dalam 'Adik menyiram bunga.'?", options: ["Adik","menyiram","bunga","di"], ans: 1 },
+        { q: "Sinonim bagi 'gemar'?", options: ["benci","suka","tidak suka","marah"], ans: 1 },
+        { q: "Antonim bagi 'masuk'?", options: ["keluar","masuk","pergi","datang"], ans: 0 },
+        { q: "Ejaan betul?", options: ["bas","bass","bass","bas"], ans: 0 },
+        { q: "Susun: 'ke / pergi / kami / kedai'", options: ["Kami pergi ke kedai","Ke kedai kami pergi","Pergi kami ke kedai","Kedai kami pergi ke"], ans: 0 },
+        { q: "Maksud 'berhemah'?", options: ["biadab","sopan","kasar","kurang ajar"], ans: 1 },
+        { q: "Kata adjektif bagi 'manis'?", options: ["pahit","masam","manis","masin"], ans: 0 },
+        { q: "Ayat yang betul?", options: ["Dia berlari dengan cepat","Dia dengan cepat berlari","Cepat dia berlari","Berlari dia dengan cepat"], ans: 0 },
+        { q: "Kata nama khas?", options: ["sungai","bukit","Selangor","gunung"], ans: 2 }
+    ],
+    eng: [
+        // 1-10
+        { q: "What is the colour of the sun?", options: ["Blue","Green","Yellow","Purple"], ans: 2 },
+        { q: "What is the opposite of 'big'?", options: ["small","tall","wide","heavy"], ans: 0 },
+        { q: "Which is a verb?", options: ["run","book","apple","school"], ans: 0 },
+        { q: "Plural of 'child' is?", options: ["childs","children","childes","childrens"], ans: 1 },
+        { q: "What is 'cat' in Malay?", options: ["anjing","kucing","burung","ikan"], ans: 1 },
+        { q: "Simple sentence: 'She ___ a book.'", options: ["read","reads","reading","readed"], ans: 1 },
+        { q: "What number is 'five'?", options: ["4","5","6","7"], ans: 1 },
+        { q: "Which is a fruit?", options: ["apple","carrot","broccoli","potato"], ans: 0 },
+        { q: "What is the opposite of 'hot'?", options: ["cold","warm","fire","sun"], ans: 0 },
+        { q: "I ___ a student.", options: ["is","am","are","be"], ans: 1 },
+        // 11-20
+        { q: "What is the colour of grass?", options: ["Red","Yellow","Green","Blue"], ans: 2 },
+        { q: "Opposite of 'short'?", options: ["tall","small","big","wide"], ans: 0 },
+        { q: "Which is a noun?", options: ["run","happy","book","beautiful"], ans: 2 },
+        { q: "Plural of 'mouse'?", options: ["mouses","mice","mices","mouse"], ans: 1 },
+        { q: "What is 'school' in Malay?", options: ["rumah","sekolah","kedai","hospital"], ans: 1 },
+        { q: "Sentence: 'They ___ playing football.'", options: ["is","am","are","be"], ans: 2 },
+        { q: "Number after seven?", options: ["6","8","9","10"], ans: 1 },
+        { q: "Which is a vegetable?", options: ["apple","orange","carrot","banana"], ans: 2 },
+        { q: "Opposite of 'day'?", options: ["night","morning","evening","noon"], ans: 0 },
+        { q: "She ___ a teacher.", options: ["is","am","are","be"], ans: 0 },
+        // 21-30
+        { q: "Colour of the sky?", options: ["Green","Blue","Red","Yellow"], ans: 1 },
+        { q: "Opposite of 'young'?", options: ["old","new","small","big"], ans: 0 },
+        { q: "Which is an adjective?", options: ["run","beautiful","book","school"], ans: 1 },
+        { q: "Plural of 'foot'?", options: ["foots","feet","feets","footes"], ans: 1 },
+        { q: "What is 'car' in Malay?", options: ["bas","kereta","lori","teksi"], ans: 1 },
+        { q: "Sentence: 'We ___ going to school.'", options: ["is","am","are","be"], ans: 2 },
+        { q: "Number before ten?", options: ["8","9","11","12"], ans: 1 },
+        { q: "Which is an animal?", options: ["table","chair","dog","book"], ans: 2 },
+        { q: "Opposite of 'heavy'?", options: ["light","big","small","tall"], ans: 0 },
+        { q: "He ___ a doctor.", options: ["is","am","are","be"], ans: 0 },
+        // 31-40
+        { q: "What colour is milk?", options: ["White","Black","Red","Green"], ans: 0 },
+        { q: "Opposite of 'slow'?", options: ["fast","big","small","tall"], ans: 0 },
+        { q: "Which is a verb?", options: ["beautiful","smart","run","happy"], ans: 2 },
+        { q: "Plural of 'woman'?", options: ["womans","women","womens","womanes"], ans: 1 },
+        { q: "What is 'water' in Malay?", options: ["udara","api","air","tanah"], ans: 2 },
+        { q: "Sentence: 'My mother ___ cooking.'", options: ["is","am","are","be"], ans: 0 },
+        { q: "Number after twelve?", options: ["11","13","14","15"], ans: 1 },
+        { q: "Which is a colour?", options: ["table","blue","chair","book"], ans: 1 },
+        { q: "Opposite of 'happy'?", options: ["sad","big","small","tall"], ans: 0 },
+        { q: "They ___ students.", options: ["is","am","are","be"], ans: 2 },
+        // 41-50
+        { q: "Colour of banana?", options: ["Red","Yellow","Green","Blue"], ans: 1 },
+        { q: "Opposite of 'push'?", options: ["pull","run","jump","walk"], ans: 0 },
+        { q: "Which is a noun?", options: ["run","beautiful","school","happy"], ans: 2 },
+        { q: "Plural of 'goose'?", options: ["gooses","geese","geeses","goose"], ans: 1 },
+        { q: "What is 'house' in Malay?", options: ["rumah","sekolah","kedai","hospital"], ans: 0 },
+        { q: "Sentence: 'The dog ___ barking.'", options: ["is","am","are","be"], ans: 0 },
+        { q: "Number between 5 and 7?", options: ["4","6","8","9"], ans: 1 },
+        { q: "Which is a shape?", options: ["circle","book","chair","table"], ans: 0 },
+        { q: "Opposite of 'wet'?", options: ["dry","cold","hot","warm"], ans: 0 },
+        { q: "She ___ my sister.", options: ["is","am","are","be"], ans: 0 },
+        // 51-60
+        { q: "Colour of oranges?", options: ["Green","Yellow","Orange","Red"], ans: 2 },
+        { q: "Opposite of 'good'?", options: ["bad","big","small","tall"], ans: 0 },
+        { q: "Which is an adjective?", options: ["run","happy","book","school"], ans: 1 },
+        { q: "Plural of 'knife'?", options: ["knifes","knives","knive","knifes"], ans: 1 },
+        { q: "What is 'teacher' in Malay?", options: ["doktor","guru","polis","juruterbang"], ans: 1 },
+        { q: "Sentence: 'The birds ___ singing.'", options: ["is","am","are","be"], ans: 2 },
+        { q: "Number after twenty?", options: ["19","21","22","23"], ans: 1 },
+        { q: "Which is a body part?", options: ["table","chair","hand","book"], ans: 2 },
+        { q: "Opposite of 'strong'?", options: ["weak","big","small","tall"], ans: 0 },
+        { q: "We ___ happy.", options: ["is","am","are","be"], ans: 2 },
+        // 61-70
+        { q: "Colour of leaves?", options: ["Red","Yellow","Green","Blue"], ans: 2 },
+        { q: "Opposite of 'open'?", options: ["close","big","small","tall"], ans: 0 },
+        { q: "Which is a verb?", options: ["beautiful","smart","walk","happy"], ans: 2 },
+        { q: "Plural of 'child'?", options: ["childs","children","childes","childrens"], ans: 1 },
+        { q: "What is 'book' in Malay?", options: ["buku","kereta","rumah","sekolah"], ans: 0 },
+        { q: "Sentence: 'My father ___ working.'", options: ["is","am","are","be"], ans: 0 },
+        { q: "Number before thirty?", options: ["28","29","31","32"], ans: 1 },
+        { q: "Which is an animal?", options: ["table","chair","cat","book"], ans: 2 },
+        { q: "Opposite of 'clean'?", options: ["dirty","big","small","tall"], ans: 0 },
+        { q: "You ___ my friend.", options: ["is","am","are","be"], ans: 2 },
+        // 71-80
+        { q: "Colour of snow?", options: ["Red","Yellow","White","Blue"], ans: 2 },
+        { q: "Opposite of 'new'?", options: ["old","big","small","tall"], ans: 0 },
+        { q: "Which is a noun?", options: ["run","beautiful","book","happy"], ans: 2 },
+        { q: "Plural of 'man'?", options: ["mans","men","mens","manes"], ans: 1 },
+        { q: "What is 'dog' in Malay?", options: ["kucing","anjing","burung","ikan"], ans: 1 },
+        { q: "Sentence: 'The children ___ playing.'", options: ["is","am","are","be"], ans: 2 },
+        { q: "Number between 15 and 17?", options: ["14","16","18","19"], ans: 1 },
+        { q: "Which is a colour?", options: ["table","green","chair","book"], ans: 1 },
+        { q: "Opposite of 'full'?", options: ["empty","big","small","tall"], ans: 0 },
+        { q: "It ___ a cat.", options: ["is","am","are","be"], ans: 0 },
+        // 81-90
+        { q: "Colour of tomatoes?", options: ["Green","Yellow","Red","Blue"], ans: 2 },
+        { q: "Opposite of 'fast'?", options: ["slow","big","small","tall"], ans: 0 },
+        { q: "Which is a verb?", options: ["beautiful","smart","jump","happy"], ans: 2 },
+        { q: "Plural of 'foot'?", options: ["foots","feet","feets","footes"], ans: 1 },
+        { q: "What is 'pen' in Malay?", options: ["pen","buku","kereta","rumah"], ans: 0 },
+        { q: "Sentence: 'She ___ singing a song.'", options: ["is","am","are","be"], ans: 0 },
+        { q: "Number after forty?", options: ["39","41","42","43"], ans: 1 },
+        { q: "Which is a body part?", options: ["table","chair","nose","book"], ans: 2 },
+        { q: "Opposite of 'loud'?", options: ["quiet","big","small","tall"], ans: 0 },
+        { q: "They ___ doctors.", options: ["is","am","are","be"], ans: 2 },
+        // 91-100
+        { q: "Colour of the moon?", options: ["Red","Yellow","White","Blue"], ans: 2 },
+        { q: "Opposite of 'left'?", options: ["right","big","small","tall"], ans: 0 },
+        { q: "Which is an adjective?", options: ["run","beautiful","book","school"], ans: 1 },
+        { q: "Plural of 'mouse'?", options: ["mouses","mice","mices","mouse"], ans: 1 },
+        { q: "What is 'ball' in Malay?", options: ["bola","buku","kereta","rumah"], ans: 0 },
+        { q: "Sentence: 'The sun ___ shining.'", options: ["is","am","are","be"], ans: 0 },
+        { q: "Number before fifty?", options: ["48","49","51","52"], ans: 1 },
+        { q: "Which is a fruit?", options: ["table","chair","apple","book"], ans: 2 },
+        { q: "Opposite of 'bright'?", options: ["dim","big","small","tall"], ans: 0 },
+        { q: "She ___ a nurse.", options: ["is","am","are","be"], ans: 0 }
+    ],
+    sains: [
+        // 1-10
+        { q: "Organ untuk melihat?", options: ["Telinga","Mata","Hidung","Mulut"], ans: 1 },
+        { q: "Haiwan yang tinggal di air?", options: ["Kucing","Ikan","Burung","Ular"], ans: 1 },
+        { q: "Planet terbesar dalam sistem suria?", options: ["Marikh","Zuhal","Musytari","Neptun"], ans: 2 },
+        { q: "Sumber tenaga utama?", options: ["Air","Matahari","Angin","Batu"], ans: 1 },
+        { q: "Tumbuhan membuat makanan melalui?", options: ["Akar","Batang","Daun","Bunga"], ans: 2 },
+        { q: "Berapa deria yang kita ada?", options: ["3","4","5","6"], ans: 2 },
+        { q: "Cuaca yang panas?", options: ["Hujan","Salji","Cerah","Mendung"], ans: 2 },
+        { q: "Bahan yang keras?", options: ["Besi","Getah","Kertas","Plastisin"], ans: 0 },
+        { q: "Planet paling dekat dengan matahari?", options: ["Zuhrah","Marikh","Merkuri","Bumi"], ans: 2 },
+        { q: "Air mendidih pada suhu?", options: ["80°C","90°C","100°C","110°C"], ans: 2 },
+        // 11-20
+        { q: "Organ untuk pendengaran?", options: ["Mata","Telinga","Hidung","Lidah"], ans: 1 },
+        { q: "Haiwan yang boleh terbang?", options: ["Ikan","Burung","Kucing","Ular"], ans: 1 },
+        { q: "Planet yang mempunyai gelang?", options: ["Marikh","Zuhal","Musytari","Neptun"], ans: 1 },
+        { q: "Tenaga yang datang dari matahari?", options: ["Tenaga suria","Tenaga angin","Tenaga air","Tenaga nuklear"], ans: 0 },
+        { q: "Bahagian tumbuhan yang berada di dalam tanah?", options: ["Daun","Batang","Akar","Bunga"], ans: 2 },
+        { q: "Deria untuk merasa?", options: ["Mata","Telinga","Lidah","Hidung"], ans: 2 },
+        { q: "Cuaca yang sejuk?", options: ["Hujan","Salji","Cerah","Mendung"], ans: 1 },
+        { q: "Bahan yang lembut?", options: ["Besi","Kaca","Getah","Batu"], ans: 2 },
+        { q: "Planet yang paling jauh dari matahari?", options: ["Zuhal","Musytari","Neptun","Uranus"], ans: 2 },
+        { q: "Air membeku pada suhu?", options: ["0°C","100°C","50°C","25°C"], ans: 0 },
+        // 21-30
+        { q: "Organ untuk menghidu?", options: ["Mata","Telinga","Hidung","Lidah"], ans: 2 },
+        { q: "Haiwan yang hidup di darat?", options: ["Ikan","Kuda","Paus","Jerung"], ans: 1 },
+        { q: "Planet yang mempunyai kehidupan?", options: ["Marikh","Zuhal","Bumi","Neptun"], ans: 2 },
+        { q: "Tenaga yang diperoleh dari angin?", options: ["Tenaga suria","Tenaga angin","Tenaga air","Tenaga nuklear"], ans: 1 },
+        { q: "Bahagian tumbuhan yang menarik serangga?", options: ["Akar","Batang","Daun","Bunga"], ans: 3 },
+        { q: "Deria untuk melihat?", options: ["Mata","Telinga","Lidah","Hidung"], ans: 0 },
+        { q: "Cuaca yang mendung?", options: ["Hujan","Salji","Cerah","Mendung"], ans: 3 },
+        { q: "Bahan yang boleh menghantar elektrik?", options: ["Logam","Plastik","Kayu","Getah"], ans: 0 },
+        { q: "Planet yang paling kecil?", options: ["Merkuri","Zuhrah","Marikh","Bumi"], ans: 0 },
+        { q: "Proses tumbuhan membuat makanan?", options: ["Respirasi","Fotosintesis","Transpirasi","Reproduksi"], ans: 1 },
+        // 31-40
+        { q: "Organ untuk bercakap?", options: ["Mata","Telinga","Mulut","Hidung"], ans: 2 },
+        { q: "Haiwan yang hidup di hutan?", options: ["Harimau","Paus","Lumba-lumba","Jerung"], ans: 0 },
+        { q: "Planet yang berwarna merah?", options: ["Marikh","Zuhal","Musytari","Neptun"], ans: 0 },
+        { q: "Sumber tenaga yang boleh diperbaharui?", options: ["Minyak","Arang batu","Gas","Matahari"], ans: 3 },
+        { q: "Bahagian tumbuhan yang menyerap air?", options: ["Daun","Batang","Akar","Bunga"], ans: 2 },
+        { q: "Deria untuk mendengar?", options: ["Mata","Telinga","Lidah","Hidung"], ans: 1 },
+        { q: "Cuaca yang berangin?", options: ["Hujan","Salji","Cerah","Berangin"], ans: 3 },
+        { q: "Bahan yang terapung di air?", options: ["Besi","Kayu","Batu","Kaca"], ans: 1 },
+        { q: "Planet yang paling panas?", options: ["Zuhrah","Marikh","Merkuri","Bumi"], ans: 0 },
+        { q: "Gas yang diperlukan untuk bernafas?", options: ["Karbon dioksida","Oksigen","Nitrogen","Hidrogen"], ans: 1 },
+        // 41-50
+        { q: "Organ untuk berfikir?", options: ["Jantung","Paru-paru","Otak","Hati"], ans: 2 },
+        { q: "Haiwan yang hidup di kutub?", options: ["Harimau","Beruang kutub","Gajah","Zirafah"], ans: 1 },
+        { q: "Planet yang mempunyai banyak bulan?", options: ["Marikh","Zuhal","Musytari","Neptun"], ans: 2 },
+        { q: "Tenaga dari air yang mengalir?", options: ["Tenaga suria","Tenaga angin","Tenaga hidro","Tenaga nuklear"], ans: 2 },
+        { q: "Bahagian tumbuhan yang membuat biji?", options: ["Daun","Batang","Akar","Bunga"], ans: 3 },
+        { q: "Deria untuk merasa?", options: ["Mata","Telinga","Lidah","Hidung"], ans: 2 },
+        { q: "Cuaca yang panas dan lembap?", options: ["Hujan","Salji","Cerah","Mendung"], ans: 0 },
+        { q: "Bahan yang telus?", options: ["Kayu","Kaca","Besi","Plastik"], ans: 1 },
+        { q: "Planet yang mempunyai cincin?", options: ["Zuhal","Marikh","Musytari","Neptun"], ans: 0 },
+        { q: "Proses air bertukar menjadi wap?", options: ["Kondensasi","Penyejatan","Pemendapan","Hujan"], ans: 1 },
+        // 51-60
+        { q: "Organ untuk peredaran darah?", options: ["Jantung","Paru-paru","Otak","Hati"], ans: 0 },
+        { q: "Haiwan yang hidup di padang pasir?", options: ["Unta","Harimau","Beruang","Gajah"], ans: 0 },
+        { q: "Planet yang paling jauh dari matahari?", options: ["Neptun","Zuhal","Uranus","Pluto"], ans: 0 },
+        { q: "Tenaga dari bahan api fosil?", options: ["Tenaga suria","Tenaga angin","Tenaga nuklear","Tenaga fosil"], ans: 3 },
+        { q: "Bahagian tumbuhan yang menyimpan makanan?", options: ["Daun","Batang","Akar","Bunga"], ans: 1 },
+        { q: "Deria untuk melihat?", options: ["Mata","Telinga","Lidah","Hidung"], ans: 0 },
+        { q: "Cuaca yang sejuk dan berangin?", options: ["Hujan","Salji","Cerah","Mendung"], ans: 1 },
+        { q: "Bahan yang tidak menghantar elektrik?", options: ["Logam","Plastik","Besi","Kuprum"], ans: 1 },
+        { q: "Planet yang paling dekat dengan bumi?", options: ["Zuhrah","Marikh","Merkuri","Neptun"], ans: 0 },
+        { q: "Gas yang dikeluarkan semasa bernafas?", options: ["Oksigen","Karbon dioksida","Nitrogen","Hidrogen"], ans: 1 },
+        // 61-70
+        { q: "Organ untuk mencerna makanan?", options: ["Jantung","Paru-paru","Perut","Otak"], ans: 2 },
+        { q: "Haiwan yang hidup di dalam air?", options: ["Ikan","Burung","Kucing","Ular"], ans: 0 },
+        { q: "Planet yang paling terang?", options: ["Zuhrah","Marikh","Merkuri","Neptun"], ans: 0 },
+        { q: "Tenaga dari ombak?", options: ["Tenaga ombak","Tenaga angin","Tenaga suria","Tenaga nuklear"], ans: 0 },
+        { q: "Bahagian tumbuhan yang berfungsi untuk fotosintesis?", options: ["Akar","Batang","Daun","Bunga"], ans: 2 },
+        { q: "Deria untuk mendengar?", options: ["Mata","Telinga","Lidah","Hidung"], ans: 1 },
+        { q: "Cuaca yang hujan?", options: ["Hujan","Salji","Cerah","Mendung"], ans: 0 },
+        { q: "Bahan yang sangat ringan?", options: ["Besi","Getah","Kertas","Plastik"], ans: 2 },
+        { q: "Planet yang mempunyai kehidupan?", options: ["Marikh","Zuhal","Bumi","Neptun"], ans: 2 },
+        { q: "Proses air menjadi ais?", options: ["Penyejatan","Kondensasi","Pembekuan","Pemendapan"], ans: 2 },
+        // 71-80
+        { q: "Organ untuk bernafas?", options: ["Jantung","Paru-paru","Otak","Hati"], ans: 1 },
+        { q: "Haiwan yang paling besar di darat?", options: ["Gajah","Harimau","Beruang","Zirafah"], ans: 0 },
+        { q: "Planet yang mempunyai arah putaran songsang?", options: ["Zuhrah","Marikh","Musytari","Neptun"], ans: 0 },
+        { q: "Tenaga dari minyak bumi?", options: ["Tenaga suria","Tenaga angin","Tenaga fosil","Tenaga nuklear"], ans: 2 },
+        { q: "Bahagian tumbuhan yang menarik pendebunga?", options: ["Daun","Batang","Akar","Bunga"], ans: 3 },
+        { q: "Deria untuk merasa?", options: ["Mata","Telinga","Lidah","Hidung"], ans: 2 },
+        { q: "Cuaca yang ribut?", options: ["Hujan","Salji","Cerah","Ribut"], ans: 3 },
+        { q: "Bahan yang boleh ditempa?", options: ["Besi","Kaca","Plastik","Kayu"], ans: 0 },
+        { q: "Planet yang paling besar?", options: ["Musytari","Zuhal","Neptun","Uranus"], ans: 0 },
+        { q: "Gas rumah hijau utama?", options: ["Oksigen","Karbon dioksida","Nitrogen","Argon"], ans: 1 },
+        // 81-90
+        { q: "Organ untuk membuang air kecil?", options: ["Jantung","Paru-paru","Buah pinggang","Hati"], ans: 2 },
+        { q: "Haiwan yang hidup di dalam laut?", options: ["Ikan","Burung","Kucing","Ular"], ans: 0 },
+        { q: "Planet yang mempunyai banyak air?", options: ["Marikh","Zuhal","Bumi","Neptun"], ans: 2 },
+        { q: "Tenaga dari matahari?", options: ["Tenaga suria","Tenaga angin","Tenaga air","Tenaga nuklear"], ans: 0 },
+        { q: "Bahagian tumbuhan yang menyerap nutrien?", options: ["Daun","Batang","Akar","Bunga"], ans: 2 },
+        { q: "Deria untuk menghidu?", options: ["Mata","Telinga","Lidah","Hidung"], ans: 3 },
+        { q: "Cuaca yang berais?", options: ["Hujan","Salji","Cerah","Mendung"], ans: 1 },
+        { q: "Bahan yang paling ringan?", options: ["Besi","Getah","Plastik","Kayu"], ans: 2 },
+        { q: "Planet yang paling kecil?", options: ["Merkuri","Zuhrah","Marikh","Bumi"], ans: 0 },
+        { q: "Proses penyejatan air?", options: ["Penyejatan","Kondensasi","Pembekuan","Hujan"], ans: 0 },
+        // 91-100
+        { q: "Organ untuk mengawal gula darah?", options: ["Jantung","Paru-paru","Pankreas","Hati"], ans: 2 },
+        { q: "Haiwan yang hidup di dalam tanah?", options: ["Cacing","Ikan","Burung","Kucing"], ans: 0 },
+        { q: "Planet yang mempunyai gunung tertinggi?", options: ["Marikh","Zuhal","Bumi","Neptun"], ans: 2 },
+        { q: "Tenaga dari nuklear?", options: ["Tenaga suria","Tenaga angin","Tenaga nuklear","Tenaga air"], ans: 2 },
+        { q: "Bahagian tumbuhan yang menjadi buah?", options: ["Daun","Batang","Akar","Bunga"], ans: 3 },
+        { q: "Deria untuk melihat?", options: ["Mata","Telinga","Lidah","Hidung"], ans: 0 },
+        { q: "Cuaca yang panas dan kering?", options: ["Hujan","Salji","Cerah","Mendung"], ans: 2 },
+        { q: "Bahan yang tidak larut dalam air?", options: ["Garam","Gula","Minyak","Cuka"], ans: 2 },
+        { q: "Planet yang mempunyai cincin indah?", options: ["Zuhal","Marikh","Musytari","Neptun"], ans: 0 },
+        { q: "Udara mengandungi gas apa?", options: ["Oksigen","Karbon dioksida","Nitrogen","Semua di atas"], ans: 3 }
+    ]
+};
+
+// ============================================================
+//  STATE GAME
+// ============================================================
+let state = {
+    mode: 'quick',
+    age: 7,
+    questions: [],
+    currentIndex: 0,
+    score: 0,
+    stars: 0,
+    correctCount: 0,
+    wrongCount: 0,
+    streak: 0,
+    timer: 20,
+    timerInterval: null,
+    answered: false,
+    totalQuestions: 0,
+    startTime: null,
+    endTime: null,
+    badges: []
+};
+
+// ============================================================
+//  DOM REFS
+// ============================================================
+const $ = id => document.getElementById(id);
+const menuScreen = $('menuScreen');
+const gameScreen = $('gameScreen');
+const endScreen = $('endScreen');
+const questionText = $('questionText');
+const optionsBtns = document.querySelectorAll('.option-btn');
+const feedbackText = $('feedbackText');
+const feedbackBox = $('feedbackBox');
+const nextBtn = $('nextBtn');
+const quitBtn = $('quitBtn');
+const scoreDisplay = $('scoreDisplay');
+const starCount = $('starCount');
+const questionCounter = $('questionCounter');
+const progressFill = $('progressFill');
+const timerDisplay = $('timerDisplay');
+const modeLabel = $('modeLabel');
+const finalScore = $('finalScore');
+const finalCorrect = $('finalCorrect');
+const finalWrong = $('finalWrong');
+const finalStars = $('finalStars');
+const finalTime = $('finalTime');
+const badgeContainer = $('badgeContainer');
+
+// ============================================================
+//  FUNGSI UTAMA
+// ============================================================
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function getQuestionsForMode(mode) {
+    let pool = [];
+    if (mode === 'quick') {
+        const all = [...SOALAN.math, ...SOALAN.bm, ...SOALAN.eng, ...SOALAN.sains];
+        pool = shuffleArray(all).slice(0, 10);
+    } else if (mode === 'daily') {
+        const all = [...SOALAN.math, ...SOALAN.bm, ...SOALAN.eng, ...SOALAN.sains];
+        pool = shuffleArray(all).slice(0, 5);
+    } else if (SOALAN[mode]) {
+        pool = shuffleArray([...SOALAN[mode]]);
+    } else {
+        pool = [];
+    }
+    return pool;
+}
+
+function startGame(mode, age) {
+    state.mode = mode;
+    state.age = age;
+    state.currentIndex = 0;
+    state.score = 0;
+    state.stars = 0;
+    state.correctCount = 0;
+    state.wrongCount = 0;
+    state.streak = 0;
+    state.answered = false;
+    state.badges = [];
+    state.startTime = Date.now();
+
+    const allQuestions = getQuestionsForMode(mode);
+    if (mode === 'quick') {
+        state.questions = allQuestions;
+        state.totalQuestions = 10;
+    } else if (mode === 'daily') {
+        state.questions = allQuestions;
+        state.totalQuestions = 5;
+    } else {
+        state.questions = allQuestions;
+        state.totalQuestions = Math.min(allQuestions.length, 100);
+        state.questions = allQuestions.slice(0, state.totalQuestions);
+    }
+
+    if (state.questions.length === 0) {
+        alert("Maaf, tiada soalan untuk mode ini. Cuba mode lain.");
+        return;
+    }
+
+    const modeNames = { quick:'Quick', math:'Matematik', bm:'BM', eng:'English', sains:'Sains', daily:'Daily' };
+    modeLabel.textContent = modeNames[mode] || mode;
+
+    menuScreen.classList.add('hidden');
+    gameScreen.classList.remove('hidden');
+    endScreen.classList.add('hidden');
+
+    renderQuestion();
+}
+
+function renderQuestion() {
+    const qs = state.questions;
+    if (state.currentIndex >= qs.length || qs.length === 0) {
+        endGame();
+        return;
+    }
+
+    const q = qs[state.currentIndex];
+    questionText.textContent = q.q;
+
+    const shuffled = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.ans }));
+    const shuffledOptions = shuffleArray([...shuffled]);
+    const correctIndex = shuffledOptions.findIndex(item => item.isCorrect === true);
+    state._correctIndex = correctIndex;
+
+    optionsBtns.forEach((btn, idx) => {
+        btn.textContent = shuffledOptions[idx].text;
+        btn.className = 'option-btn';
+        btn.dataset.correct = (idx === correctIndex) ? 'true' : 'false';
+        btn.disabled = false;
+    });
+
+    feedbackBox.className = 'feedback-box';
+    feedbackText.textContent = 'Pilih jawapan!';
+    feedbackBox.querySelector('i').className = 'fas fa-lightbulb';
+    nextBtn.disabled = true;
+    state.answered = false;
+
+    questionCounter.textContent = `Soalan ${state.currentIndex+1}/${state.totalQuestions}`;
+    progressFill.style.width = `${((state.currentIndex) / state.totalQuestions) * 100}%`;
+    scoreDisplay.textContent = state.score;
+    starCount.textContent = state.stars;
+
+    let seconds = 20;
+    if (state.age <= 8) seconds = 15;
+    else if (state.age <= 10) seconds = 20;
+    else seconds = 30;
+    if (state.mode === 'bm' || state.mode === 'eng') seconds += 5;
+    state.timer = seconds;
+    timerDisplay.textContent = seconds + 's';
+    timerDisplay.style.color = '#a0522d';
+
+    clearInterval(state.timerInterval);
+    state.timerInterval = setInterval(() => {
+        state.timer--;
+        timerDisplay.textContent = state.timer + 's';
+        if (state.timer <= 5) timerDisplay.style.color = '#d32f2f';
+        if (state.timer <= 0) {
+            clearInterval(state.timerInterval);
+            if (!state.answered) {
+                state.answered = true;
+                state.wrongCount++;
+                state.streak = 0;
+                feedbackBox.className = 'feedback-box';
+                feedbackBox.querySelector('i').className = 'fas fa-hourglass-end';
+                feedbackText.textContent = '⏰ Masa tamat! Cuba lagi 😊';
+                optionsBtns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (btn.dataset.correct === 'true') btn.classList.add('correct');
+                });
+                nextBtn.disabled = false;
+                timerDisplay.textContent = '0s';
+            }
+        }
+    }, 1000);
+}
+
+function handleOptionClick(e) {
+    const btn = e.currentTarget;
+    if (state.answered || btn.disabled) return;
+    clearInterval(state.timerInterval);
+    state.answered = true;
+
+    const isCorrect = btn.dataset.correct === 'true';
+    if (isCorrect) {
+        state.correctCount++;
+        state.score += 10;
+        state.streak++;
+        if (state.streak >= 3) {
+            state.score += 5;
+            state.stars += 1;
+            feedbackText.textContent = '🔥 Streak! +5 bonus!';
+        } else {
+            feedbackText.textContent = 'Betul! 🎉';
+        }
+        if (state.timer > 10) {
+            state.score += 3;
+            feedbackText.textContent += ' +3 cepat!';
+        }
+        if (state.correctCount % 3 === 0) state.stars += 1;
+
+        btn.classList.add('correct');
+        feedbackBox.querySelector('i').className = 'fas fa-check-circle';
+        feedbackBox.className = 'feedback-box correct';
+        const q = state.questions[state.currentIndex];
+        const correctText = q.options[q.ans];
+        feedbackText.textContent = `✅ Betul! Jawapan: ${correctText}`;
+    } else {
+        state.wrongCount++;
+        state.streak = 0;
+        btn.classList.add('wrong');
+        feedbackBox.querySelector('i').className = 'fas fa-times-circle';
+        feedbackBox.className = 'feedback-box wrong';
+        optionsBtns.forEach(b => {
+            if (b.dataset.correct === 'true') b.classList.add('correct');
+        });
+        const q = state.questions[state.currentIndex];
+        const correctText = q.options[q.ans];
+        feedbackText.textContent = `😊 Hampir! Jawapan betul: ${correctText}`;
+    }
+
+    optionsBtns.forEach(b => b.disabled = true);
+    scoreDisplay.textContent = state.score;
+    starCount.textContent = state.stars;
+    nextBtn.disabled = false;
+}
+
+function nextQuestion() {
+    state.currentIndex++;
+    if (state.currentIndex >= state.totalQuestions) {
+        endGame();
+    } else {
+        renderQuestion();
+    }
+}
+
+function endGame() {
+    clearInterval(state.timerInterval);
+    state.endTime = Date.now();
+    const totalSec = Math.floor((state.endTime - state.startTime) / 1000);
+
+    const badges = [];
+    if (state.correctCount >= state.totalQuestions * 0.8) badges.push('🏆 Super Learner');
+    if (state.mode === 'math' && state.correctCount >= state.totalQuestions * 0.6) badges.push('🧮 Math Hero');
+    if (state.mode === 'sains' && state.correctCount >= state.totalQuestions * 0.6) badges.push('🔬 Science Explorer');
+    if (state.mode === 'eng' && state.correctCount >= state.totalQuestions * 0.6) badges.push('🌟 English Star');
+    if (state.mode === 'bm' && state.correctCount >= state.totalQuestions * 0.6) badges.push('📚 BM Master');
+    if (state.stars >= 3) badges.push('⭐ Bintang Bijak');
+    if (badges.length === 0) badges.push('🌱 Pelajar Gigih');
+
+    state.badges = badges;
+
+    gameScreen.classList.add('hidden');
+    endScreen.classList.remove('hidden');
+
+    finalScore.textContent = state.score;
+    finalCorrect.textContent = state.correctCount;
+    finalWrong.textContent = state.wrongCount;
+    finalStars.textContent = state.stars;
+    finalTime.textContent = totalSec;
+
+    badgeContainer.innerHTML = badges.map(b => `<span class="badge-item"><i class="fas fa-medal"></i> ${b}</span>`).join('');
+}
+
+function resetToMenu() {
+    clearInterval(state.timerInterval);
+    gameScreen.classList.add('hidden');
+    endScreen.classList.add('hidden');
+    menuScreen.classList.remove('hidden');
+}
+
+// ============================================================
+//  EVENT BINDING
+// ============================================================
+optionsBtns.forEach(btn => btn.addEventListener('click', handleOptionClick));
+nextBtn.addEventListener('click', nextQuestion);
+quitBtn.addEventListener('click', resetToMenu);
+$('playAgainBtn').addEventListener('click', () => {
+    endScreen.classList.add('hidden');
+    startGame(state.mode, state.age);
+});
+$('endMenuBtn').addEventListener('click', resetToMenu);
+
+// Pilihan umur
+document.querySelectorAll('.age-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        state.age = parseInt(this.dataset.age);
+    });
+});
+document.querySelector('.age-btn[data-age="7"]').classList.add('active');
+
+// Mode cards
+document.querySelectorAll('.mode-card').forEach(card => {
+    card.addEventListener('click', function() {
+        document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        state.mode = this.dataset.mode;
+    });
+});
+
+// Start button
+$('startGameBtn').addEventListener('click', function() {
+    if (!state.mode) state.mode = 'quick';
+    startGame(state.mode, state.age);
+});
+
+// ============================================================
+//  INISIALISASI
+// ============================================================
+menuScreen.classList.remove('hidden');
+gameScreen.classList.add('hidden');
+endScreen.classList.add('hidden');
+console.log('🚀 EduQuest FULL VERSION sedia! 100 soalan setiap subjek.');
+</script>
+</body>
+</html>
