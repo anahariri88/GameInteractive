@@ -745,6 +745,38 @@
 
         // Initialize
         initialize();
-    </script>
+    </script> 
+function tukarStatus(idBaris, jenis) {
+  let selStatus = document.getElementById('status-' + idBaris);
+  if (!selStatus) return;
+  if (jenis === 'approved') {
+    selStatus.innerHTML = '<span style="color:green; background:#d4edda; padding:2px 6px; border-radius:4px;">Diluluskan</span>';
+  } else if (jenis === 'rejected') {
+    selStatus.innerHTML = '<span style="color:red; background:#f8d7da; padding:2px 6px; border-radius:4px;">Ditolak</span>';
+  }
+  alert("Status dikemaskini ✅");
+}
+
+function tambahPembayaran(tarikh, nama, email, cara, jumlah) {
+  let body = document.getElementById('tableBody');
+  let tiadaData = document.querySelector('#tableBody td[colspan="7"]');
+  if (tiadaData) tiadaData.parentElement.remove();
+
+  let id = Date.now();
+  body.insertAdjacentHTML('beforeend', `
+    <tr id="row-${id}">
+      <td>${tarikh}</td>
+      <td>${nama}</td>
+      <td>${email}</td>
+      <td>${cara}</td>
+      <td>${jumlah}</td>
+      <td id="status-${id}"><span style="color:orange; background:#fff3cd; padding:2px 6px; border-radius:4px;">Menunggu</span></td>
+      <td>
+        <button onclick="tukarStatus(${id}, 'approved')" style="background:green; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">✅ Lulus</button>
+        <button onclick="tukarStatus(${id}, 'rejected')" style="background:red; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">❌ Tolak</button>
+      </td>
+    </tr>
+  `);
+}
 </body>
 </html>
